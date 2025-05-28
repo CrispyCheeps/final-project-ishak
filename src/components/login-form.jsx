@@ -5,16 +5,34 @@ import { Label } from "@/components/ui/label";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { login } from "@/api/authApi";
-import { loginUser, setEmail, setPassword } from "@/features/auth/authSlice";
+import { loginUser, setEmail, setIsLoggedIn, setPassword, setProfilePictureUrl } from "@/features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export function LoginForm({ className, ...props }) {
   const dispatch = useDispatch();
-  const { email, password, error, loading } = useSelector((state) => state.auth);
+  const { email, password, error, loading, profilePictureUrl } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     console.log("handleSubmit called");
     e.preventDefault();
-    dispatch(loginUser(email, password));
+    try {
+      console.log("Submitting login with email:", email, "and password:", password);
+      const result = await dispatch(loginUser(email, password));
+      if (result?.code == 200) {
+        localStorage.setItem("token", result.token);
+        console.log(result.data.profilePictureUrl);
+        dispatch(setProfilePictureUrl(result.data.profilePictureUrl));
+        console.log("Login successful, navigating to final project");
+        dispatch(setIsLoggedIn(true));
+        navigate("/final-project");
+
+      }
+    }
+    catch (err) {
+      console.error("Login failed:", err);
+    }
+
   };
 
   return (
