@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-const PromoCard = ({ id, title, description, imageUrl }) => {
+const ActivityCard = ({ id, title, description, imageUrl }) => {
   return (
     <Card className="w-sm max-w-md mx-auto overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
       {/* Image Section */}
@@ -45,4 +45,4 @@ const PromoCard = ({ id, title, description, imageUrl }) => {
   );
 };
 
-export default PromoCard;
+export default ActivityCard;

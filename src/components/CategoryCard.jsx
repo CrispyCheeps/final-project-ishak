@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-const PromoCard = ({ id, title, description, imageUrl }) => {
+const CategoryCard = ({ key, name, imageUrl }) => {
   return (
     <Card className="w-sm max-w-md mx-auto overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">
       {/* Image Section */}
@@ -28,7 +28,7 @@ const PromoCard = ({ id, title, description, imageUrl }) => {
         
         <div className="relative z-10">
           <h3 className="text-lg font-medium text-gray-700 mb-4 transform transition-all duration-300 group-hover:text-teal-700 group-hover:translate-x-1">
-            {title || "Promo Title"}
+            {name || "Category Name"}
           </h3>
 
           <Button className="w-full bg bg-gradient-to-r from-[#2CAB98] to-[#329AC0] hover:bg-teal-600 text-white py-3 rounded-lg font-medium transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 relative overflow-hidden group/btn">
@@ -45,4 +45,4 @@ const PromoCard = ({ id, title, description, imageUrl }) => {
   );
 };
 
-export default PromoCard;
+export default CategoryCard;

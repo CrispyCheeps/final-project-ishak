@@ -37,7 +37,7 @@ export function LoginForm({ className, ...props }) {
         dispatch(setProfilePictureUrl(result.data.profilePictureUrl));
         console.log("Login successful, navigating to final project");
         dispatch(setIsLoggedIn(true));
-        navigate("/final-project");
+        navigate("/beranda");
       }
     } catch (err) {
       console.error("Login failed:", err);

@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import PrivateRoute from "./routes/PrivateRoute";
+import CategoryPage from "./pages/CategoryPage";
+import ActivityPage from "./pages/ActivityPage";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -18,16 +20,15 @@ function App() {
           {/* <Route path='/register' element={<RegisterP}></Route> */}
 
           <Route
-            path="/final-project"
+            path="/beranda"
             element={
               <PrivateRoute>
                 <MainPage />
               </PrivateRoute>
             }
-          >
-           
-
-          </Route>
+          ></Route>
+          <Route path="/categories" element={<CategoryPage />} />
+          <Route path="/activities" element={<ActivityPage />} />
         </Routes>
       </BrowserRouter>
     </>

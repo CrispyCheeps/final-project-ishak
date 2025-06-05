@@ -36,7 +36,7 @@ const Navbar = () => {
       >
         {listItems.map((item, index) => (
           <li 
-            className="relative group cursor-pointer" 
+            className="relative group cursor-pointer font-bold" 
             key={item} 
             onClick={() => navigate(`/${item}`)}
           >
@@ -48,7 +48,7 @@ const Navbar = () => {
 
       {/* Logo */}
       <div className="hidden md:block">
-        <button className="bg-white py-1 px-4 rounded-xl shadow-2xl text-white font-semibold hover:from-blue-600 hover:to-green-500 hover:shadow-green-500 shadow-blue-500">
+        <button onClick={() => navigate("/beranda")} className="bg-white py-1 px-4 rounded-xl shadow-2xl text-white font-semibold hover:from-blue-600 hover:to-green-500 hover:shadow-green-500 shadow-blue-500">
           <img className="h-8" src="images/logo-kecil.png" alt="" />
         </button>
       </div>

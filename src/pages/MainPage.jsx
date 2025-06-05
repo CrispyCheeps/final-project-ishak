@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, MapPin, Search } from "lucide-react";
+import { ChevronDown, Icon, MapPin, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +23,7 @@ export default function MainPage() {
   const [dataPromo, setDataPromo] = useState([]);
   const dispatch = useDispatch();
   const { promos, loadingPromo, error } = useSelector((state) => state.promos);
-  const {menu} = useSelector((state) => state.menu);
+  const { menu } = useSelector((state) => state.menu);
 
   useEffect(() => {
     dispatch(getPromos());
@@ -85,8 +85,15 @@ export default function MainPage() {
           <h1>Loading...</h1>
         ) : (
           <>
-            <div className="w-[392px] mx-8 my-8 h-[50px] rounded-xl  bg bg-gradient-to-r from-[#2BAE91] to-[#329AC0] text-white py-4 text-center">
-              <h1 className="text-2xl">Promo Special</h1>
+            <div className="w-[240px] mx-8 my-8 h-[50px] rounded-xl bg-gradient-to-r from-[#2BAE91] to-[#329AC0] text-white">
+              <div className="flex items-center justify-center gap-3 py-4">
+                <img
+                  src="images/icon-announcement.png"
+                  alt="Announcement"
+                  className="w-6 h-6"
+                />
+                <span className="text-xl font-semibold">Promo Special</span>
+              </div>
             </div>
             <div className="flex flex-wrap gap-4 mx-8">
               {promos.map((promo) => (
