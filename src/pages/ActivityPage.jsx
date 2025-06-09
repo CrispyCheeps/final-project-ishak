@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import axios from "@/helpers/axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Icon, MapPin, Search } from "lucide-react";
 import {
@@ -16,6 +16,17 @@ import ActivityCard from "@/components/ActivityCard";
 export default function ActivityPage() {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const lastScrollY = useRef(0);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredActivities = activities.filter((activity) => {
+    return activity.title?.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+  };
 
   const getActivities = () => {
     setLoading(true);
@@ -42,13 +53,34 @@ export default function ActivityPage() {
 
   useEffect(() => {
     getActivities();
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY.current) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
+
+  console.log("Filtered Activities:", filteredActivities);
 
   return (
     <>
-      <Navbar />
+      <Navbar show={showNavbar} />
 
-      <HeroSection />
+      <HeroSection
+        handleSearchChange={handleSearchChange}
+        searchQuery={searchQuery}
+      />
 
       {loading ? (
         <h1>Loading...</h1>
@@ -105,13 +137,14 @@ export default function ActivityPage() {
                     <circle cx="200.891" cy="47.5" r="47.5" />
                   </g>
                 </svg>
-                <span className="text-2xl font-semibold">Activites</span>
+                <span className="text-2xl font-semibold">Activities</span>
               </div>
             </div>
             <div className="flex flex-wrap gap-4 mx-8">
-              {activities.map((activity) => (
+              {filteredActivities.map((activity) => (
                 <ActivityCard
                   key={activity.id}
+                  id={activity.id}
                   imageUrl={activity.imageUrls}
                   title={activity.title}
                   price={activity.price}
@@ -123,7 +156,6 @@ export default function ActivityPage() {
                   city={activity.city}
                   location={activity.location_maps}
                   category={activity.category}
-                  
                 />
               ))}
             </div>

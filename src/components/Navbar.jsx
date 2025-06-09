@@ -6,14 +6,21 @@ import { useNavigate } from "react-router-dom";
 
 const listItems = ["activities", "categories", "purchased"];
 
-const Navbar = () => {
+const Navbar = ({ show}) => {
   const { profilePictureUrl } = useSelector((state) => state.auth);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { menu } = useSelector((state) => state.menu);
 
+
   return (
-    <div className="fixed w-[90%] md:w-[55%] bg-gradient-to-r from-[#2BAE91] to-[#329AC0] flex justify-between items-center py-3 px-6 md:px-10 left-1/2 translate-x-[-50%] top-[20px] rounded-full backdrop-blur-md bg-opacity-60 text-white shadow-lg z-50">
+    <div
+      className={`transform transition-all duration-500 ease-out backdrop-blur-sm ${
+        show
+          ? "translate-y-0 opacity-100 shadow-lg"
+          : "-translate-y-full opacity-0 shadow-none"
+      } fixed w-[90%] md:w-[55%] bg-gradient-to-r from-[#2BAE91] to-[#329AC0] flex justify-between items-center py-3 px-6 md:px-10 left-1/2 translate-x-[-50%] top-[20px] rounded-full backdrop-blur-md bg-opacity-60 text-white shadow-lg z-50`}
+    >
       {/* Burger Menu (Mobile Only) */}
       <div className="flex items-center md:hidden">
         <button
@@ -35,9 +42,9 @@ const Navbar = () => {
         } md:flex py-4 md:py-0 px-6 md:px-0 rounded-xl md:rounded-none`}
       >
         {listItems.map((item, index) => (
-          <li 
-            className="relative group cursor-pointer font-bold" 
-            key={item} 
+          <li
+            className="relative group cursor-pointer font-bold"
+            key={item}
             onClick={() => navigate(`/${item}`)}
           >
             {item}
@@ -48,7 +55,10 @@ const Navbar = () => {
 
       {/* Logo */}
       <div className="hidden md:block">
-        <button onClick={() => navigate("/beranda")} className="bg-white py-1 px-4 rounded-xl shadow-2xl text-white font-semibold hover:from-blue-600 hover:to-green-500 hover:shadow-green-500 shadow-blue-500">
+        <button
+          onClick={() => navigate("/beranda")}
+          className="bg-white py-1 px-4 rounded-xl shadow-2xl text-white font-semibold hover:from-blue-600 hover:to-green-500 hover:shadow-green-500 shadow-blue-500"
+        >
           <img className="h-8" src="images/logo-kecil.png" alt="" />
         </button>
       </div>

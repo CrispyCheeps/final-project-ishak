@@ -6,8 +6,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
-export default function HeroSection() {
+export default function HeroSection({ handleSearchChange}) {
+
+  const [inputValue, setInputValue] = useState("");
+
+  const handleClickSearch = () => {
+    handleSearchChange(inputValue);
+  }
   return (
     <>
       <section className="my-12 flex items-center justify-center">
@@ -43,8 +50,15 @@ export default function HeroSection() {
                 <input
                   placeholder="Cari destinasi atau aktivitas"
                   className="w-full outline-none text-gray-700"
+                  onChange={(e) => setInputValue(e.target.value)}
+                  value={inputValue}
                 />
-                <Button className="ml-2 rounded-full bg-[#2BAE91] hover:bg-[#329AC0] text-white px-6">
+                <Button
+                  onClick={() => {
+                    handleClickSearch();
+                  }}
+                  className="ml-2 rounded-full bg-[#2BAE91] hover:bg-[#329AC0] text-white px-6"
+                >
                   Cari
                 </Button>
               </div>
@@ -52,7 +66,6 @@ export default function HeroSection() {
           </div>
         </div>
       </section>
-      ;
     </>
   );
 }

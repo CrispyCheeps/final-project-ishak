@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import axios from "@/helpers/axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Icon, MapPin, Search } from "lucide-react";
 import {
@@ -12,9 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import HeroSection from "@/components/HeroSection";
 import CategoryCard from "@/components/CategoryCard";
+import { current } from "@reduxjs/toolkit";
 
 export default function CategoryPage() {
   const [categories, setCategories] = useState([]);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const lastScrollY = useRef(0);
 
   const getCategories = () => {
     axios
@@ -34,11 +37,26 @@ export default function CategoryPage() {
 
   useEffect(() => {
     getCategories();
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY.current) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
     <>
-      <Navbar />
+      <Navbar show={showNavbar} />
 
       <HeroSection />
 

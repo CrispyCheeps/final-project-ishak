@@ -34,7 +34,7 @@ const CategoryCard = ({ key, name, imageUrl }) => {
           <Button className="w-full bg bg-gradient-to-r from-[#2CAB98] to-[#329AC0] hover:bg-teal-600 text-white py-3 rounded-lg font-medium transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 relative overflow-hidden group/btn">
             {/* Button Shimmer Effect */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000"></div>
-            <span className="relative z-10">Lihat Promo</span>
+            <span className="relative z-10">Lihat</span>
           </Button>
         </div>
         

@@ -8,6 +8,7 @@ import MainPage from "./pages/MainPage";
 import PrivateRoute from "./routes/PrivateRoute";
 import CategoryPage from "./pages/CategoryPage";
 import ActivityPage from "./pages/ActivityPage";
+import LihatActivity from "./pages/LihatActivity";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -29,6 +30,7 @@ function App() {
           ></Route>
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/activities" element={<ActivityPage />} />
+          <Route path="/activity/:id" element={<LihatActivity />} />
         </Routes>
       </BrowserRouter>
     </>
