@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSelector } from "react-redux";
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingCart, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import AvatarDropdown from "./AvatarDropdown";
 
 const listItems = ["activities", "categories", "purchased"];
 
-const Navbar = ({ show}) => {
+const Navbar = ({ show }) => {
   const { profilePictureUrl } = useSelector((state) => state.auth);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { menu } = useSelector((state) => state.menu);
-
 
   return (
     <div
@@ -37,21 +37,52 @@ const Navbar = ({ show}) => {
 
       {/* Nav Items */}
       <ul
-        className={`absolute md:static top-16 md:top-auto left-0 md:left-auto w-full md:w-auto bg-gradient-to-r from-[#2BAE91] to-[#329AC0] md:bg-transparent flex-col md:flex-row items-center md:flex gap-6 text-ul transition-all duration-300 ease-in-out md:gap-8 ${
+        className={`absolute gap-8 md:static top-16 md:top-auto left-0 md:left-auto w-full md:w-auto md:bg-transparent flex-col md:flex-row items-center md:flex gap-6 text-ul transition-all duration-300 ease-in-out md:gap-8 ${
           isMobileMenuOpen ? "flex" : "hidden"
         } md:flex py-4 md:py-0 px-6 md:px-0 rounded-xl md:rounded-none`}
       >
-        {listItems.map((item, index) => (
-          <li
-            className="relative group cursor-pointer font-bold"
-            key={item}
-            onClick={() => navigate(`/${item}`)}
-          >
-            {item}
-            <span className="absolute left-0 bottom-[-5px] w-0 h-1 rounded-xl bg-gradient-to-r from-[#939393] to-white transition-all duration-300 group-hover:w-full"></span>
-          </li>
-        ))}
+        {listItems.map((item, index) => {
+          if (item === "purchased") {
+            if (localStorage.getItem("token")) {
+              return (
+                <li
+                  className="relative group cursor-pointer font-bold"
+                  key={item}
+                  onClick={() => navigate(`/${item}`)}
+                >
+                  {item}
+                  <span className="absolute left-0 bottom-[-5px] w-0 h-1 rounded-xl bg-gradient-to-r from-[#939393] to-white transition-all duration-300 group-hover:w-full"></span>
+                </li>
+              );
+            } else {
+              return null;
+            }
+          } else {
+            return (
+              <li
+                className="relative group cursor-pointer font-bold"
+                key={item}
+                onClick={() => navigate(`/${item}`)}
+              >
+                {item}
+                <span className="absolute left-0 bottom-[-5px] w-0 h-1 rounded-xl bg-gradient-to-r from-[#939393] to-white transition-all duration-300 group-hover:w-full"></span>
+              </li>
+            );
+          }
+        })}
       </ul>
+
+      {localStorage.getItem("token") && (
+        <div
+          onClick={() => navigate("/cart")}
+          className="flex items-center space-x-2"
+        >
+          <ShoppingCart className="h-6 w-6" />
+          <span className="font-semibold text-lg relative group cursor-pointer">
+            My Cart
+          </span>
+        </div>
+      )}
 
       {/* Logo */}
       <div className="hidden md:block">
@@ -59,15 +90,20 @@ const Navbar = ({ show}) => {
           onClick={() => navigate("/beranda")}
           className="bg-white py-1 px-4 rounded-xl shadow-2xl text-white font-semibold hover:from-blue-600 hover:to-green-500 hover:shadow-green-500 shadow-blue-500"
         >
-          <img className="h-8" src="images/logo-kecil.png" alt="" />
+          <img
+            className="h-8"
+            src="/images/logo-kecil.png"
+            alt="LOGO tripantara"
+          />
         </button>
       </div>
 
       {/* Avatar */}
-      <Avatar className="w-10 h-10 cursor-pointer">
+      {/* <Avatar className="w-10 h-10 cursor-pointer">
         <AvatarImage src={profilePictureUrl} alt="User Avatar" />
         <AvatarFallback>U</AvatarFallback>
-      </Avatar>
+      </Avatar> */}
+      <AvatarDropdown />
     </div>
   );
 };

@@ -18,6 +18,16 @@ export default function CategoryPage() {
   const [categories, setCategories] = useState([]);
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollY = useRef(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const filteredCategories = categories.filter((category) => {
+    return category.name?.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+  };
 
   const getCategories = () => {
     axios
@@ -34,6 +44,28 @@ export default function CategoryPage() {
         console.log(err);
       });
   };
+
+  const getByCategoryId = (categoryId) => {
+    setLoading(true);
+    axios.get(`/api/v1/category/${categoryId}`, {
+      headers: {
+        apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setLoading(false);
+        if (res.data.code == "200") {
+          setCategories(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
 
   useEffect(() => {
     getCategories();
@@ -58,10 +90,14 @@ export default function CategoryPage() {
     <>
       <Navbar show={showNavbar} />
 
-      <HeroSection />
+      <HeroSection
+        handleSearchChange={handleSearchChange}
+        searchQuery={searchQuery}
+        getByCategoryId={getByCategoryId}
+      />
 
       <div className="flex flex-wrap gap-4 mx-8">
-        {categories.map((category) => (
+        {filteredCategories.map((category) => (
           <CategoryCard
             key={category.id}
             name={category.name}

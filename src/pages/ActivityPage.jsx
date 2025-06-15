@@ -51,6 +51,28 @@ export default function ActivityPage() {
       });
   };
 
+  const getActivityByCategoryId = (categoryId) => {
+    setLoading(true);
+    axios.get(`/api/v1/activities-by-category/${categoryId}`, {
+      headers: {
+        apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setLoading(false);
+        if (res.data.code == "200") {
+          setActivities(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   useEffect(() => {
     getActivities();
 
@@ -80,6 +102,7 @@ export default function ActivityPage() {
       <HeroSection
         handleSearchChange={handleSearchChange}
         searchQuery={searchQuery}
+        getByCategoryId={getActivityByCategoryId}
       />
 
       {loading ? (

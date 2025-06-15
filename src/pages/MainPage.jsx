@@ -24,6 +24,7 @@ export default function MainPage() {
   const dispatch = useDispatch();
   const { promos, loadingPromo, error } = useSelector((state) => state.promos);
   const { menu } = useSelector((state) => state.menu);
+  const [showNavbar, setShowNavbar] = useState(true);
 
   useEffect(() => {
     dispatch(getPromos());
@@ -34,7 +35,7 @@ export default function MainPage() {
 
   return (
     <>
-      <Navbar />
+      <Navbar show={showNavbar} />
       <section className="my-12 flex items-center justify-center">
         <div className="relative w-full h-[420px] bg-[url('https://ik.imagekit.io/tvlk/image/imageResource/2025/01/05/1736039117166-e16913199b4e62397ea8435ddd83b811.png?tr=dpr-2,q-75')] bg-cover bg-center">
           <div className="absolute inset-0 bg-black/30" />

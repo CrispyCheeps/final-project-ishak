@@ -33,6 +33,8 @@ export function LoginForm({ className, ...props }) {
       if (result?.code == 200) {
         localStorage.setItem("token", result.token);
         localStorage.setItem("role", result.data.role);
+        localStorage.setItem("profilePicture", result.data.profilePictureUrl);
+        localStorage.setItem("userName", result.data.name);
         console.log(result.data.profilePictureUrl);
         dispatch(setProfilePictureUrl(result.data.profilePictureUrl));
         console.log("Login successful, navigating to final project");
