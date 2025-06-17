@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSelector } from "react-redux";
 import { Menu, ShoppingCart, X } from "lucide-react";
@@ -7,11 +7,28 @@ import AvatarDropdown from "./AvatarDropdown";
 
 const listItems = ["activities", "categories", "purchased"];
 
-const Navbar = ({ show }) => {
+const Navbar = () => {
   const { profilePictureUrl } = useSelector((state) => state.auth);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { menu } = useSelector((state) => state.menu);
+ const [show, setShow] = useState(true);
+ const lastScrollY = useRef(0);
+
+ useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY.current && show) {
+        setShow(false);
+      } else if (currentScrollY < lastScrollY.current && !show) {
+        setShow(true);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [show]);
+
 
   return (
     <div

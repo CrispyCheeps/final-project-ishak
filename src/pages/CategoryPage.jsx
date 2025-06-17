@@ -69,21 +69,6 @@ export default function CategoryPage() {
 
   useEffect(() => {
     getCategories();
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY.current) {
-        setShowNavbar(false);
-      } else {
-        setShowNavbar(true);
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
   return (

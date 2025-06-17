@@ -25,13 +25,29 @@ export default function MainPage() {
   const { promos, loadingPromo, error } = useSelector((state) => state.promos);
   const { menu } = useSelector((state) => state.menu);
   const [showNavbar, setShowNavbar] = useState(true);
+  const [itemToShow, setItemToShow] = useState(3);
+  const [showAllItems, setShowAllItems] = useState(false);
+
+  const displayedActivities = showAllItems
+    ? promos
+    : promos.slice(0, itemToShow);
 
   useEffect(() => {
     dispatch(getPromos());
   }, [dispatch]);
 
-  console.log("Promos:", promos);
-  console.log("Menu:", menu);
+  const handleShowMore = () => {
+    if (showAllItems) {
+      setShowAllItems(false);
+      setItemToShow(3);
+      setTimeout(() => {
+        const activitiesSection = document.querySelector('.activities-section');
+        if (activitiesSection) {
+          activitiesSection.scrollIntoView{ behavior : 'smooth', block 'start'}
+        }
+      })
+    }
+  }
 
   return (
     <>

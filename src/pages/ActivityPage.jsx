@@ -19,13 +19,45 @@ export default function ActivityPage() {
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollY = useRef(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [itemsToShow, setItemsToShow] = useState(3); // Menampilkan 8 item pertama
+  const [showAllItems, setShowAllItems] = useState(false);
 
   const filteredActivities = activities.filter((activity) => {
     return activity.title?.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
+  // Data yang akan ditampilkan berdasarkan itemsToShow atau showAllItems
+  const displayedActivities = showAllItems 
+    ? filteredActivities 
+    : filteredActivities.slice(0, itemsToShow);
+
   const handleSearchChange = (query) => {
     setSearchQuery(query);
+    // Reset ke tampilan awal saat melakukan pencarian
+    setShowAllItems(false);
+    setItemsToShow(8);
+  };
+
+  const handleShowMore = () => {
+    if (showAllItems) {
+      // Kembali ke tampilan awal
+      setShowAllItems(false);
+      setItemsToShow(3);
+      // Scroll ke bagian activities
+      setTimeout(() => {
+        const activitiesSection = document.querySelector('.activities-header');
+        if (activitiesSection) {
+          activitiesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    } else {
+      // Cek apakah dengan menambah 8 item akan melebihi total
+      if (itemsToShow + 3 >= filteredActivities.length) {
+        setShowAllItems(true);
+      } else {
+        setItemsToShow(prev => prev + 3);
+      }
+    }
   };
 
   const getActivities = () => {
@@ -45,6 +77,7 @@ export default function ActivityPage() {
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       })
       .finally(() => {
         setLoading(false);
@@ -53,6 +86,10 @@ export default function ActivityPage() {
 
   const getActivityByCategoryId = (categoryId) => {
     setLoading(true);
+    // Reset pagination saat memilih kategori
+    setShowAllItems(false);
+    setItemsToShow(8);
+    
     axios.get(`/api/v1/activities-by-category/${categoryId}`, {
       headers: {
         apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
@@ -67,6 +104,7 @@ export default function ActivityPage() {
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       })
       .finally(() => {
         setLoading(false);
@@ -75,25 +113,10 @@ export default function ActivityPage() {
 
   useEffect(() => {
     getActivities();
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > lastScrollY.current) {
-        setShowNavbar(false);
-      } else {
-        setShowNavbar(true);
-      }
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
   console.log("Filtered Activities:", filteredActivities);
+  console.log("Displayed Activities:", displayedActivities);
 
   return (
     <>
@@ -106,11 +129,16 @@ export default function ActivityPage() {
       />
 
       {loading ? (
-        <h1>Loading...</h1>
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="flex flex-col items-center gap-4">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#2BAE91] border-t-transparent"></div>
+            <h1 className="text-xl font-semibold text-gray-700">Loading activities...</h1>
+          </div>
+        </div>
       ) : (
-        activities && (
+        activities.length > 0 && (
           <>
-            <div className="w-[200px] mx-8 my-8 h-[50px] rounded-xl bg-gradient-to-r from-[#2BAE91] to-[#329AC0] text-white">
+            <div className="activities-header w-[200px] mx-8 my-8 h-[50px] rounded-xl bg-gradient-to-r from-[#2BAE91] to-[#329AC0] text-white">
               <div className="flex items-center justify-center gap-3 py-4">
                 <svg
                   fill="#000000"
@@ -163,25 +191,86 @@ export default function ActivityPage() {
                 <span className="text-2xl font-semibold">Activities</span>
               </div>
             </div>
-            <div className="flex flex-wrap gap-4 mx-8">
-              {filteredActivities.map((activity) => (
-                <ActivityCard
-                  key={activity.id}
-                  id={activity.id}
-                  imageUrl={activity.imageUrls}
-                  title={activity.title}
-                  price={activity.price}
-                  discount={activity.price_discount}
-                  totalReview={activity.total_reviews}
-                  facilities={activity.facilities}
-                  address={activity.address}
-                  province={activity.province}
-                  city={activity.city}
-                  location={activity.location_maps}
-                  category={activity.category}
-                />
-              ))}
-            </div>
+
+            {/* Informasi hasil pencarian */}
+            {searchQuery && (
+              <div className="mx-8 mb-4">
+                <p className="text-gray-600">
+                  Menampilkan <span className="font-semibold text-[#2BAE91]">{displayedActivities.length}</span> dari{" "}
+                  <span className="font-semibold">{filteredActivities.length}</span> aktivitas untuk "{searchQuery}"
+                </p>
+              </div>
+            )}
+
+            {/* Grid Activities */}
+            {filteredActivities.length > 0 ? (
+              <>
+                <div className="flex flex-wrap gap-4 mx-8 mb-8">
+                  {displayedActivities.map((activity) => (
+                    <ActivityCard
+                      key={activity.id}
+                      id={activity.id}
+                      imageUrl={activity.imageUrls}
+                      title={activity.title}
+                      price={activity.price}
+                      discount={activity.price_discount}
+                      totalReview={activity.total_reviews}
+                      facilities={activity.facilities}
+                      address={activity.address}
+                      province={activity.province}
+                      city={activity.city}
+                      location={activity.location_maps}
+                      category={activity.category}
+                    />
+                  ))}
+                </div>
+
+                {/* Tombol Lihat Selengkapnya */}
+                {filteredActivities.length > 8 && (
+                  <div className="flex justify-center mb-12">
+                    <Button
+                      onClick={handleShowMore}
+                      className="px-8 py-3 bg-gradient-to-r from-[#2BAE91] to-[#329AC0] hover:from-[#248F78] hover:to-[#2A85A0] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+                    >
+                      {showAllItems ? (
+                        <>
+                          <ChevronDown className="w-5 h-5 rotate-180 transition-transform duration-300" />
+                          Tampilkan Lebih Sedikit
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="w-5 h-5 transition-transform duration-300" />
+                          Lihat Selengkapnya ({filteredActivities.length - displayedActivities.length} lainnya)
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Pesan jika tidak ada hasil */
+              <div className="flex flex-col items-center justify-center min-h-[300px] text-center mx-8 mb-12">
+                <div className="text-6xl mb-4">🔍</div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  Tidak ada aktivitas ditemukan
+                </h3>
+                <p className="text-gray-500 mb-6 max-w-md">
+                  {searchQuery 
+                    ? `Tidak ditemukan aktivitas dengan kata kunci "${searchQuery}". Coba gunakan kata kunci yang berbeda.`
+                    : "Tidak ada aktivitas yang tersedia saat ini."
+                  }
+                </p>
+                {searchQuery && (
+                  <Button
+                    onClick={() => handleSearchChange("")}
+                    variant="outline"
+                    className="border-[#2BAE91] text-[#2BAE91] hover:bg-[#2BAE91] hover:text-white transition-colors duration-300"
+                  >
+                    Hapus Pencarian
+                  </Button>
+                )}
+              </div>
+            )}
           </>
         )
       )}
