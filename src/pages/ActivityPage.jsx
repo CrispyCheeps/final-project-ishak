@@ -51,7 +51,7 @@ export default function ActivityPage() {
         }
       }, 100);
     } else {
-      // Cek apakah dengan menambah 8 item akan melebihi total
+      // Cek apakah dengan menambah 3 item akan melebihi total
       if (itemsToShow + 3 >= filteredActivities.length) {
         setShowAllItems(true);
       } else {
@@ -226,7 +226,7 @@ export default function ActivityPage() {
                 </div>
 
                 {/* Tombol Lihat Selengkapnya */}
-                {filteredActivities.length > 8 && (
+                {filteredActivities.length > 3 && (
                   <div className="flex justify-center mb-12">
                     <Button
                       onClick={handleShowMore}
