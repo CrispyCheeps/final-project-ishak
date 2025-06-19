@@ -30,16 +30,16 @@ export function LoginForm({ className, ...props }) {
         password
       );
       const result = await dispatch(loginUser(email, password));
-      if (result?.code == 200) {
+      if (result?.code == 200 && result?.data.role === "user") {
         localStorage.setItem("token", result.token);
-        localStorage.setItem("role", result.data.role);
-        localStorage.setItem("profilePicture", result.data.profilePictureUrl);
-        localStorage.setItem("userName", result.data.name);
-        console.log(result.data.profilePictureUrl);
         dispatch(setProfilePictureUrl(result.data.profilePictureUrl));
-        console.log("Login successful, navigating to final project");
         dispatch(setIsLoggedIn(true));
         navigate("/beranda");
+      } else if (result?.code == 200 && result?.data.role === "admin") {
+        localStorage.setItem("token", result.token);
+        dispatch(setProfilePictureUrl(result.data.profilePictureUrl));
+        dispatch(setIsLoggedIn(true));
+        navigate("/admin/dashboard");
       }
     } catch (err) {
       console.error("Login failed:", err);

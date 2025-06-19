@@ -10,6 +10,7 @@ import CategoryPage from "./pages/CategoryPage";
 import ActivityPage from "./pages/ActivityPage";
 import LihatActivity from "./pages/LihatActivity";
 import CartPage from "./pages/CartPage";
+import UserManagement from "./pages/Admin/UserManagement";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,7 +22,7 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           {/* <Route path='/register' element={<RegisterP}></Route> */}
 
-          <Route path="/beranda" element={<MainPage/>}></Route>
+          <Route path="/beranda" element={<MainPage />}></Route>
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/activities" element={<ActivityPage />} />
           <Route path="/activity/:id" element={<LihatActivity />} />
@@ -30,6 +31,14 @@ function App() {
             element={
               <PrivateRoute>
                 <CartPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <PrivateRoute>
+                <UserManagement />
               </PrivateRoute>
             }
           />
