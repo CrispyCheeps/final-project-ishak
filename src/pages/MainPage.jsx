@@ -1,6 +1,20 @@
 import Navbar from "@/components/Navbar";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Icon, MapPin, Search } from "lucide-react";
+import {
+  ChevronDown,
+  Icon,
+  MapPin,
+  Search,
+  X,
+  Copy,
+  Check,
+  Gift,
+  Calendar,
+  Users,
+  Tag,
+  Percent,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +46,8 @@ export default function MainPage() {
   const [showAllItems, setShowAllItems] = useState(false);
   const [activities, setActivities] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [selectedPromo, setSelectedPromo] = useState(null);
+  const [copiedCode, setCopiedCode] = useState("");
 
   const displayedPromos = showAllItems ? promos : promos.slice(0, itemToShow);
   const displayedActivities = showAllItems
@@ -40,6 +56,24 @@ export default function MainPage() {
   const displayedCategories = showAllItems
     ? categories
     : categories.slice(0, itemToShow);
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const copyToClipboard = async (code) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopiedCode(code);
+      setTimeout(() => setCopiedCode(""), 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
 
   const getActivities = () => {
     setLoadingPromo(true);
@@ -69,7 +103,7 @@ export default function MainPage() {
     axios
       .get("/api/v1/categories", {
         headers: {
-          "apiKey": "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
         },
       })
       .then((res) => {
@@ -79,6 +113,15 @@ export default function MainPage() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const openTicket = (promo) => {
+    setSelectedPromo(promo);
+  };
+
+  const closeTicket = () => {
+    setSelectedPromo(null);
+    setCopiedCode("");
   };
 
   useEffect(() => {
@@ -120,9 +163,10 @@ export default function MainPage() {
         <div className="relative w-full h-[420px] bg-[url('https://ik.imagekit.io/tvlk/image/imageResource/2025/01/05/1736039117166-e16913199b4e62397ea8435ddd83b811.png?tr=dpr-2,q-75')] bg-cover bg-center">
           <div className="absolute inset-0 bg-black/30" />
           <div className="relative z-10 flex flex-col items-center justify-center text-center text-white h-full px-4">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">
-              Tempat wisata di
-            </h1>
+            <h1 className="text-3xl md:text-5xl font-bold mb-2">Tripantara</h1>
+            <p className="mb-8 font-sans">
+              Temukan keajaiban tersembunyi dengan Tripantara
+            </p>
             {menu === "promos" && (
               <div className="flex items-center gap-4 flex-wrap justify-center">
                 {/* Dropdown - bisa pakai shadcn Popover + Button */}
@@ -142,7 +186,10 @@ export default function MainPage() {
                     className="w-full outline-none text-gray-700"
                     disabled
                   />
-                  <Button onClick={() => navigate("/activities")} className="ml-2 rounded-full bg-[#2BAE91] hover:bg-[#329AC0] text-white px-6">
+                  <Button
+                    onClick={() => navigate("/activities")}
+                    className="ml-2 rounded-full bg-[#2BAE91] hover:bg-[#329AC0] text-white px-6"
+                  >
                     Cari
                   </Button>
                 </div>
@@ -180,6 +227,7 @@ export default function MainPage() {
                       key={promo.id}
                       title={promo.title}
                       imageUrl={promo.imageUrl}
+                      openTicket={() => openTicket(promo)}
                     />
                   ))}
                 </div>
@@ -218,6 +266,150 @@ export default function MainPage() {
           </>
         )}
       </div>
+
+      {/* Ticket Popup Modal */}
+      {selectedPromo && (
+        <div className="fixed inset-0 bg-black bg-opacity-10 flex items-start justify-center p-4 z-50 backdrop-blur-sm overflow-y-auto">
+          <div className="relative max-w-md max-h-[90vh] my-auto w-full animate-in zoom-in-95 duration-300">
+            {/* Close Button */}
+            <button
+              onClick={closeTicket}
+              className="absolute -top-4 -right-4 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors z-10"
+            >
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+
+            {/* Ticket Design */}
+            <div className="bg-white rounded-3xl shadow-2xl overflow-y-auto">
+              {/* Ticket Header */}
+              <div className="relative bg-[#2BAE91] p-6 text-white">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center">
+                    <Gift className="w-6 h-6 mr-2" />
+                    <span className="font-bold text-lg">PROMO TICKET</span>
+                  </div>
+                  <div className="bg-white bg-opacity-20 rounded-full px-3 py-1 text-xs font-medium">
+                    <p className="text-black">AKTIF</p>
+                  </div>
+                </div>
+
+                <h2 className="text-xl font-bold mb-2">
+                  {selectedPromo.title}
+                </h2>
+                <p className="text-blue-100 text-sm">
+                  {selectedPromo.description}
+                </p>
+
+                {/* Perforated Edge */}
+                <div className="absolute -bottom-3 left-0 right-0 flex justify-center">
+                  <div className="flex space-x-2">
+                    {Array.from({ length: 15 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-3 h-3 bg-white rounded-full"
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Ticket Body */}
+              <div className="p-6 pt-8">
+                {/* Promo Code Section */}
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center bg-orange-500 text-white px-4 py-2 rounded-full mb-3">
+                    <Tag className="w-4 h-4 mr-2" />
+                    <span className="font-medium text-sm">KODE PROMO</span>
+                  </div>
+
+                  <div className="relative">
+                    <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-4 mb-3">
+                      <div className="text-3xl font-bold text-gray-800 tracking-wider font-mono">
+                        {selectedPromo.promo_code}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => copyToClipboard(selectedPromo.promo_code)}
+                      className="w-full bg-[#2BAE91] hover:bg-green-900 text-white py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center"
+                    >
+                      {copiedCode === selectedPromo.promo_code ? (
+                        <>
+                          <Check className="w-5 h-5 mr-2" />
+                          Berhasil Disalin!
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-5 h-5 mr-2" />
+                          Salin Kode Promo
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Promo Details */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <span className="text-gray-600 text-sm">Diskon</span>
+                    <span className="font-bold text-green-600">
+                      {formatCurrency(selectedPromo.promo_discount_price)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                    <span className="text-gray-600 text-sm">
+                      Min. Pembelian
+                    </span>
+                    <span className="font-bold text-[#2BAE91]">
+                      {formatCurrency(selectedPromo.minimum_claim_price)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Terms & Conditions */}
+                <div className="mt-6">
+                  <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
+                    <Users className="w-4 h-4 mr-2" />
+                    Syarat & Ketentuan
+                  </h4>
+                  <div className="bg-gray-50 rounded-lg p-3 overflow-y-auto max-h-full">
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {selectedPromo.terms_condition.replace(/<[^>]*>/g, "")}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Ticket Footer */}
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center">
+                      <Calendar className="w-3 h-3 mr-1" />
+                      <span>Valid hingga kedaluwarsa</span>
+                    </div>
+                    <div className="flex items-center">
+                      <MapPin className="w-3 h-3 mr-1" />
+                      <span>ID: {selectedPromo.id.slice(-8)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Alert */}
+      {copiedCode && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <Alert className="bg-green-50 border-green-200">
+            <Check className="h-4 w-4 text-green-600" />
+            <AlertDescription className="text-green-800">
+              Kode promo berhasil disalin ke clipboard!
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
 
       {/* Activities */}
       <div className="border-t border-gray-200">
@@ -273,8 +465,7 @@ export default function MainPage() {
           <span className="text-2xl font-semibold">Activities</span>
         </div>
 
-        {activities.length > 0 && (
-          <>
+
             {/* Grid Activities */}
             {activities.length > 0 ? (
               <>
@@ -331,8 +522,6 @@ export default function MainPage() {
                 </h3>
               </div>
             )}
-          </>
-        )}
       </div>
 
       <div className="border-t border-gray-200">
@@ -341,16 +530,17 @@ export default function MainPage() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4 mx-8 mb-30">
-        {categories.length > 0 ? (
-          displayedCategories.map((category) => (
-            <CategoryCard
-              key={category.id}
-              id={category.id}
-              imageUrl={category.imageUrls}
-              title={category.title}
-            />
-          ))
+      {
+        categories.length > 0 ? (
+          <div className="flex flex-wrap gap-4 mx-8 mb-30">
+            {displayedCategories.map((category) => (
+              <CategoryCard
+                id={category.id}
+                imageUrl={category.imageUrl}
+                name={category.name}
+              />
+            ))}
+          </div>
         ) : (
           /* Pesan jika tidak ada hasil */
           <div className="flex flex-col items-center justify-center min-h-[300px] text-center mx-8 mb-12">
@@ -359,8 +549,8 @@ export default function MainPage() {
               Tidak ada kategori ditemukan
             </h3>
           </div>
-        )}
-      </div>
+        )
+      }
       {/* Tombol Lihat Selengkapnya */}
       {categories.length > 3 && (
         <div className="flex justify-center mb-12">

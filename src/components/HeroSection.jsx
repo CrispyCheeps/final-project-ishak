@@ -43,8 +43,8 @@ export default function HeroSection({ handleSearchChange, getByCategoryId }) {
         <div className="relative w-full h-[420px] bg-[url('https://ik.imagekit.io/tvlk/image/imageResource/2025/01/05/1736039117166-e16913199b4e62397ea8435ddd83b811.png?tr=dpr-2,q-75')] bg-cover bg-center">
           <div className="absolute inset-0 bg-black/30" />
           <div className="relative z-10 flex flex-col items-center justify-center text-center text-white h-full px-4">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">
-              Tempat wisata di
+            <h1 className="text-2xl md:text-3xl font-bold mb-4">
+              Petualangan Seru Menantimu di Nusantara
             </h1>
             <div className="flex items-center gap-4 flex-wrap justify-center">
               {/* Dropdown - bisa pakai shadcn Popover + Button */}

@@ -19,7 +19,7 @@ export default function ActivityPage() {
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollY = useRef(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [itemsToShow, setItemsToShow] = useState(3); // Menampilkan 8 item pertama
+  const [itemsToShow, setItemsToShow] = useState(6); // Menampilkan 8 item pertama
   const [showAllItems, setShowAllItems] = useState(false);
 
   const filteredActivities = activities.filter((activity) => {
@@ -35,14 +35,14 @@ export default function ActivityPage() {
     setSearchQuery(query);
     // Reset ke tampilan awal saat melakukan pencarian
     setShowAllItems(false);
-    setItemsToShow(8);
+    setItemsToShow(6);
   };
 
   const handleShowMore = () => {
     if (showAllItems) {
       // Kembali ke tampilan awal
       setShowAllItems(false);
-      setItemsToShow(3);
+      setItemsToShow(6);
       // Scroll ke bagian activities
       setTimeout(() => {
         const activitiesSection = document.querySelector('.activities-header');

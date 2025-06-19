@@ -1,13 +1,9 @@
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Navbar from "@/components/Navbar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import {
-  MapPin,
-  Star,
-  Accessibility,
-} from "lucide-react";
+import { MapPin, Star, Accessibility } from "lucide-react";
 import axios from "@/helpers/axios";
 
 export default function LihatActivity() {
@@ -76,6 +72,30 @@ export default function LihatActivity() {
     };
   }, [handleScroll]);
 
+  const navigate = useNavigate();
+
+  const handleAddToCart = () => {
+    let token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please log in to add items to your cart.");
+      navigate("/");
+    }
+
+    axios
+      .post("/api/v1/add-cart", {
+        headers: {
+          apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+        },
+      })
+      .then((res) => {
+        console.log("Item added to cart:", res.data);
+      })
+      .catch((err) => {
+        console.error("Error adding item to cart:", err);
+        alert("Failed to add item to cart. Please try again.");
+      });
+  };
+
   const formatPrice = (price) =>
     new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -83,14 +103,17 @@ export default function LihatActivity() {
       minimumFractionDigits: 0,
     }).format(price);
 
-  const discountPercentage =
-    activity?.price_discount
-      ? Math.round(((activity.price_discount - activity.price) / activity.price_discount) * 100)
-      : 0;
+  const discountPercentage = activity?.price_discount
+    ? Math.round(
+        ((activity.price_discount - activity.price) / activity.price_discount) *
+          100
+      )
+    : 0;
 
-  const mapSrc = typeof activity?.location_maps === "string"
-    ? (activity.location_maps.match(/src=['"]([^'"]*)['"]/i)?.[1] || "")
-    : "";
+  const mapSrc =
+    typeof activity?.location_maps === "string"
+      ? activity.location_maps.match(/src=['"]([^'"]*)['"]/i)?.[1] || ""
+      : "";
 
   if (loading || !activity) {
     return (
@@ -142,7 +165,9 @@ export default function LihatActivity() {
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`w-3 h-3 rounded-full ${selectedImage === index ? "bg-white" : "bg-white/50"}`}
+                      className={`w-3 h-3 rounded-full ${
+                        selectedImage === index ? "bg-white" : "bg-white/50"
+                      }`}
                     />
                   ))}
                 </div>
@@ -153,35 +178,51 @@ export default function LihatActivity() {
               <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
                 {activity.category.name}
               </span>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{activity.title}</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                {activity.title}
+              </h1>
               <div className="flex items-center space-x-4 mb-4">
                 <div className="flex items-center space-x-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       size={20}
-                      className={i < activity.rating ? "text-yellow-400 fill-current" : "text-gray-300"}
+                      className={
+                        i < activity.rating
+                          ? "text-yellow-400 fill-current"
+                          : "text-gray-300"
+                      }
                     />
                   ))}
-                  <span className="text-lg font-semibold text-gray-900">{activity.rating}</span>
+                  <span className="text-lg font-semibold text-gray-900">
+                    {activity.rating}
+                  </span>
                 </div>
                 <span className="text-gray-600">
-                  {activity.total_reviews > 0 ? `(${activity.total_reviews.toLocaleString()} reviews)` : "No reviews yet"}
+                  {activity.total_reviews > 0
+                    ? `(${activity.total_reviews.toLocaleString()} reviews)`
+                    : "No reviews yet"}
                 </span>
               </div>
               <div className="flex items-start space-x-2 text-gray-600">
                 <MapPin size={20} className="mt-1 flex-shrink-0" />
                 <div>
-                  <p className="font-medium">{activity.city}, {activity.province}</p>
+                  <p className="font-medium">
+                    {activity.city}, {activity.province}
+                  </p>
                   <p className="text-sm">{activity.address}</p>
                 </div>
               </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">About This Activity</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                About This Activity
+              </h2>
               <p className="text-gray-600 leading-relaxed">
-                {showFullDescription ? activity.description : `${activity.description.substring(0, 200)}...`}
+                {showFullDescription
+                  ? activity.description
+                  : `${activity.description.substring(0, 200)}...`}
               </p>
               <button
                 onClick={() => setShowFullDescription(!showFullDescription)}
@@ -192,7 +233,9 @@ export default function LihatActivity() {
             </div>
 
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Facilities</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Facilities
+              </h2>
               <div className="flex items-center space-x-2">
                 <Accessibility size={20} className="text-green-600" />
                 <span className="text-gray-700">{activity.facilities}</span>
@@ -200,7 +243,9 @@ export default function LihatActivity() {
             </div>
 
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Location</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Location
+              </h2>
               <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
                 {mapSrc ? (
                   <iframe
@@ -217,7 +262,9 @@ export default function LihatActivity() {
                   <div className="text-center">
                     <MapPin size={48} className="text-gray-400 mx-auto mb-2" />
                     <p className="text-gray-600">Interactive Map</p>
-                    <p className="text-sm text-gray-500">Click to view on Google Maps</p>
+                    <p className="text-sm text-gray-500">
+                      Click to view on Google Maps
+                    </p>
                   </div>
                 )}
               </div>
@@ -228,28 +275,46 @@ export default function LihatActivity() {
             <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8">
               <div className="mb-6">
                 <div className="flex items-center space-x-2 mb-2">
-                  <span className="text-3xl font-bold text-gray-900">{formatPrice(activity.price)}</span>
+                  <span className="text-3xl font-bold text-gray-900">
+                    {formatPrice(activity.price)}
+                  </span>
                   <span className="text-sm text-gray-500">per person</span>
                 </div>
                 {activity.price_discount && (
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg text-gray-500 line-through">{formatPrice(activity.price_discount)}</span>
+                    <span className="text-lg text-gray-500 line-through">
+                      {formatPrice(activity.price_discount)}
+                    </span>
                     <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-sm font-medium">
-                      Save {formatPrice(activity.price_discount - activity.price)}
+                      Save{" "}
+                      {formatPrice(activity.price_discount - activity.price)}
                     </span>
                   </div>
                 )}
               </div>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Number of Guests</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Number of Guests
+                </label>
                 <div className="flex items-center space-x-4">
-                  <button className="w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-50">-</button>
+                  <button className="w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-50">
+                    -
+                  </button>
                   <span className="text-lg font-medium">2</span>
-                  <button className="w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-50">+</button>
+                  <button className="w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-50">
+                    +
+                  </button>
                 </div>
               </div>
-              <button className="w-full bg-blue-600 text-white font-semibold py-4 rounded-lg hover:bg-blue-700 transition-colors mb-4">Book Now</button>
-              <button className="w-full border border-gray-300 text-gray-700 font-semibold py-4 rounded-lg hover:bg-gray-50 transition-colors">Add to Cart</button>
+              <button className="w-full bg-blue-600 text-white font-semibold py-4 rounded-lg hover:bg-blue-700 transition-colors mb-4">
+                Book Now
+              </button>
+              <button
+                onClick={handleAddToCart}
+                className="w-full border border-gray-300 text-gray-700 font-semibold py-4 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
