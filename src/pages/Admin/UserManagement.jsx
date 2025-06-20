@@ -20,125 +20,51 @@ import {
   Bell,
   Search,
   Menu,
+  User,
+  Shield,
 } from "lucide-react";
 import axios from "@/helpers/axios";
+import RoleDropdown from "@/components/admin/RoleDropdown";
+import { Input } from "@/components/ui/input";
 
 const UserManagement = () => {
-  // Sample data with more entries for demonstration
-  //   const userData = {
-  //     "code": "200",
-  //     "status": "OK",
-  //     "message": "Success",
-  //     "data": [
-  //       {
-  //         "id": "44e5af9b-72d6-4590-a365-17be6bbd6c06",
-  //         "name": "satuduatigaempatlima",
-  //         "email": "satuduatigaempatlima",
-  //         "role": "user",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722960869471-pngwing.com-(3).png",
-  //         "phoneNumber": "08176931994"
-  //       },
-  //       {
-  //         "id": "18f21d58-b6ab-40fb-aaf0-a65f8d4c006e",
-  //         "name": "zoro",
-  //         "email": "zoro@gmail.com",
-  //         "role": "admin",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722580385593-pngwing.com.png",
-  //         "phoneNumber": "09753272456"
-  //       },
-  //       // Additional sample data to demonstrate pagination
-  //       {
-  //         "id": "33a4bf7c-82e5-4501-b476-28cf7bce7d07",
-  //         "name": "alice",
-  //         "email": "alice@example.com",
-  //         "role": "user",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722960869471-pngwing.com-(3).png",
-  //         "phoneNumber": "08123456789"
-  //       },
-  //       {
-  //         "id": "22b3ae6b-71d4-4390-a254-16ad5aac5b06",
-  //         "name": "bob",
-  //         "email": "bob@example.com",
-  //         "role": "admin",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722580385593-pngwing.com.png",
-  //         "phoneNumber": "08234567890"
-  //       },
-  //       {
-  //         "id": "11c2bd5a-60c3-4289-9143-05bc4999ba05",
-  //         "name": "charlie",
-  //         "email": "charlie@example.com",
-  //         "role": "user",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722960869471-pngwing.com-(3).png",
-  //         "phoneNumber": "08345678901"
-  //       },
-  //       {
-  //         "id": "00b1ac49-5fb2-4178-8032-f4ab3888a904",
-  //         "name": "diana",
-  //         "email": "diana@example.com",
-  //         "role": "user",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722960869471-pngwing.com-(3).png",
-  //         "phoneNumber": "08456789012"
-  //       },
-  //       {
-  //         "id": "ff01bb38-4ea1-4067-7f21-e3982777b803",
-  //         "name": "eve",
-  //         "email": "eve@example.com",
-  //         "role": "admin",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722580385593-pngwing.com.png",
-  //         "phoneNumber": "08567890123"
-  //       },
-  //       {
-  //         "id": "ee00aa27-3d90-3f56-6e10-d2871666c702",
-  //         "name": "frank",
-  //         "email": "frank@example.com",
-  //         "role": "user",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722960869471-pngwing.com-(3).png",
-  //         "phoneNumber": "08678901234"
-  //       },
-  //       {
-  //         "id": "dd99bb16-2c8f-2e45-5d0f-c1760555b601",
-  //         "name": "grace",
-  //         "email": "grace@example.com",
-  //         "role": "user",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722960869471-pngwing.com-(3).png",
-  //         "phoneNumber": "08789012345"
-  //       },
-  //       {
-  //         "id": "cc88aa05-1b7e-1d34-4c0e-b0654444a500",
-  //         "name": "henry",
-  //         "email": "henry@example.com",
-  //         "role": "admin",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722580385593-pngwing.com.png",
-  //         "phoneNumber": "08890123456"
-  //       },
-  //       {
-  //         "id": "bb7799f4-0a6d-0c23-3b0d-9f543333940f",
-  //         "name": "iris",
-  //         "email": "iris@example.com",
-  //         "role": "user",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722960869471-pngwing.com-(3).png",
-  //         "phoneNumber": "08901234567"
-  //       },
-  //       {
-  //         "id": "aa6688e3-f95c-fb12-2a0c-8e432222830e",
-  //         "name": "jack",
-  //         "email": "jack@example.com",
-  //         "role": "user",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722960869471-pngwing.com-(3).png",
-  //         "phoneNumber": "09012345678"
-  //       },
-  //       {
-  //         "id": "995577d2-e84b-ea01-190b-7d321111720d",
-  //         "name": "kate",
-  //         "email": "kate@example.com",
-  //         "role": "admin",
-  //         "profilePictureUrl": "https://travel-journal-api-bootcamp.do.dibimbing.id/images/1722580385593-pngwing.com.png",
-  //         "phoneNumber": "09123456789"
-  //       }
-  //     ]
-  //   };
-
   const [userData, setUserData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+  const handleRoleChange = (userId, newRole) => {
+    setUserData((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId ? { ...user, role: newRole } : user
+      )
+    );
+    axios
+      .post(
+        `/api/v1/update-user-role/${userId}`,
+        {
+          role: newRole,
+        },
+        {
+          headers: {
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.code === "200") {
+          alert("User role updated successfully.");
+        } else {W
+          alert("Failed to update user role. Please try again.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error updating role:", err);
+        alert("Failed to update user role. Please try again.");
+      });
+
+    console.log(`Updated user ${userId} role to ${newRole}`);
+  };
 
   const fetchUserData = () => {
     axios
@@ -150,7 +76,6 @@ const UserManagement = () => {
       })
       .then((response) => {
         if (response.data.code === "200") {
-          console.log("User data fetched successfully:", response.data);
           setUserData(response.data.data);
         } else if (
           response.data.code === "401" ||
@@ -172,6 +97,22 @@ const UserManagement = () => {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const filtered = userData.filter(
+        (user) =>
+          (user.name || "").toLowerCase().includes(query) ||
+          (user.email || "").toLowerCase().includes(query) ||
+          (user.role || "").toLowerCase().includes(query) ||
+          (user.phone || "").toLowerCase().includes(query)
+      );
+      setFilteredUsers(filtered);
+    } else {
+      setFilteredUsers(userData);
+    }
+  }, [searchQuery, userData]);
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -182,7 +123,7 @@ const UserManagement = () => {
   // Calculate current items to display
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = userData.slice(startIndex, endIndex);
+  const currentItems = filteredUsers.slice(startIndex, endIndex);
 
   // Pagination handlers
   const goToPage = (page) => {
@@ -328,6 +269,13 @@ const UserManagement = () => {
           <Card>
             <CardHeader>
               <CardTitle>All Users</CardTitle>
+              <Input
+                type="text"
+                placeholder="Search by name, email, role, or phone"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="mb-4"
+              />
               <CardDescription>
                 A comprehensive list of all users in your system with their
                 details and roles.
@@ -350,9 +298,6 @@ const UserManagement = () => {
                         </th>
                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                           Phone
-                        </th>
-                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                          ID
                         </th>
                       </tr>
                     </thead>
@@ -385,21 +330,22 @@ const UserManagement = () => {
                               {user.email}
                             </div>
                           </td>
-                          <td className="p-4">
+                          {/* <td className="p-4">
                             <Badge
                               variant={getRoleVariant(user.role)}
                               className="capitalize"
                             >
                               {user.role}
                             </Badge>
+                          </td> */}
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <RoleDropdown
+                              user={user}
+                              onRoleChange={handleRoleChange}
+                            />
                           </td>
                           <td className="p-4">
                             <div className="text-sm">{user.phoneNumber}</div>
-                          </td>
-                          <td className="p-4">
-                            <div className="text-xs font-mono text-muted-foreground">
-                              {user.id.slice(0, 8)}...
-                            </div>
                           </td>
                         </tr>
                       ))}

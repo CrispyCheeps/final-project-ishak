@@ -11,6 +11,7 @@ import ActivityPage from "./pages/ActivityPage";
 import LihatActivity from "./pages/LihatActivity";
 import CartPage from "./pages/CartPage";
 import UserManagement from "./pages/Admin/UserManagement";
+import Dashboard from "./components/admin/Dashboard";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -38,7 +39,7 @@ function App() {
             path="/admin/dashboard"
             element={
               <PrivateRoute>
-                <UserManagement />
+                <Dashboard />
               </PrivateRoute>
             }
           />
