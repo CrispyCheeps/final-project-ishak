@@ -10,8 +10,9 @@ import CategoryPage from "./pages/CategoryPage";
 import ActivityPage from "./pages/ActivityPage";
 import LihatActivity from "./pages/LihatActivity";
 import CartPage from "./pages/CartPage";
-import UserManagement from "./pages/Admin/UserManagement";
-import Dashboard from "./components/admin/Dashboard";
+import HomeAdmin from "./pages/Admin/HomeAdmin";
+import UsersPageAdmin from "./pages/Admin/UsersPageAdmin";
+import BannerPageAdmin from "./pages/Admin/BannerPageAdmin";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -36,10 +37,26 @@ function App() {
             }
           />
           <Route
-            path="/admin/dashboard"
+            path="/admin/home"
             element={
               <PrivateRoute>
-                <Dashboard />
+                <HomeAdmin />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <PrivateRoute>
+                <UsersPageAdmin />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/banner"
+            element={
+              <PrivateRoute>
+                <BannerPageAdmin />
               </PrivateRoute>
             }
           />
