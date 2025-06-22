@@ -15,11 +15,11 @@ import { Button } from "../ui/button";
 import axiosInstance from "@/helpers/axios";
 import { useNavigate } from "react-router-dom";
 
-const BannerTable = () => {
+const CategoryTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [selectedBanner, setSelectedBanner] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -35,15 +35,15 @@ const BannerTable = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataBanner, setDataBanner] = useState([]);
 
-  const fetchDataBanners = () => {
+  const fetchDataCategories = () => {
     axios
-      .get("/api/v1/banners", {
+      .get("/api/v1/categories", {
         headers: {
           apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
         },
       })
       .then((res) => {
-        console.log("Data Banners:", res.data.data);
+        console.log("Data categories:", res.data.data);
         setDataBanner(res.data.data);
       })
       .catch((err) => {
@@ -52,7 +52,7 @@ const BannerTable = () => {
   };
 
   useEffect(() => {
-    fetchDataBanners();
+    fetchDataCategories();
   }, []);
 
   const formatDate = (dateString) => {
@@ -78,32 +78,32 @@ const BannerTable = () => {
     setImagePreview(null);
   };
 
-  const handleOpenEditModal = (banner) => {
-    setSelectedBanner(banner);
+  const handleOpenEditModal = (category) => {
+    setSelectedCategory(category);
     setEditFormData({
-      id: banner.id,
-      name: banner.name,
-      imageUrl: banner.imageUrl,
+      id: category.id,
+      name: category.name,
+      imageUrl: category.imageUrl,
     });
-    setEditImagePreview(banner.imageUrl);
+    setEditImagePreview(category.imageUrl);
     setIsEditModalOpen(true);
   };
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
-    setSelectedBanner(null);
+    setSelectedCategory(null);
     setEditFormData({ id: "", name: "", imageUrl: "" });
     setEditImagePreview(null);
   };
 
-  const handleOpenPreview = (banner) => {
-    setSelectedBanner(banner);
+  const handleOpenPreview = (category) => {
+    setSelectedCategory(category);
     setIsPreviewModalOpen(true);
   };
 
   const handleClosePreview = () => {
     setIsPreviewModalOpen(false);
-    setSelectedBanner(null);
+    setSelectedCategory(null);
   };
 
   const handleInputChange = (e) => {
@@ -126,12 +126,12 @@ const BannerTable = () => {
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      alert("Nama banner harus diisi.");
+      alert("Nama category harus diisi.");
       return;
     }
 
     if (!formData.imageUrl) {
-      alert("URL banner harus dimasukkan.");
+      alert("URL category harus dimasukkan.");
       return;
     }
 
@@ -140,7 +140,7 @@ const BannerTable = () => {
     try {
       console.log("Data yang akan disimpan:", formData);
       const res = await axiosInstance.post(
-        "/api/v1/banners",
+        "/api/v1/categories",
         {
           name: formData.name,
           imageUrl: formData.imageUrl,
@@ -153,13 +153,13 @@ const BannerTable = () => {
         }
       );
 
-      console.log("Banner created:", res.data);
-      alert("Banner berhasil ditambahkan!");
+      console.log("category created:", res.data);
+      alert("category berhasil ditambahkan!");
       handleCloseModal();
       console.log("Response dari server:", res.data);
     } catch (error) {
-      console.error("Error creating banner:", err);
-      alert("Gagal menambahkan banner. Silakan coba lagi.");
+      console.error("Error creating category:", err);
+      alert("Gagal menambahkan category. Silakan coba lagi.");
     } finally {
       setIsLoading(false);
     }
@@ -169,7 +169,7 @@ const BannerTable = () => {
     e.preventDefault();
 
     if (!editFormData.name.trim()) {
-      alert("Nama banner harus diisi.");
+      alert("Nama category harus diisi.");
       return;
     }
 
@@ -179,7 +179,7 @@ const BannerTable = () => {
       console.log("Data yang akan diupdate:", editFormData);
 
       const res = await axiosInstance.post(
-        `/api/v1/update-banner/${editFormData.id}`, // Ganti sesuai dengan field ID-nya
+        `/api/v1/update-category/${editFormData.id}`, // Ganti sesuai dengan field ID-nya
         {
           name: editFormData.name,
           imageUrl: editFormData.imageUrl,
@@ -192,13 +192,13 @@ const BannerTable = () => {
         }
       );
 
-      console.log("Banner updated:", res.data);
-      alert("Banner berhasil diperbarui!");
+      console.log("category updated:", res.data);
+      alert("category berhasil diperbarui!");
       handleCloseEditModal();
-      fetchDataBanners(); // Refresh data after update
+      fetchDataCategories(); // Refresh data after update
     } catch (err) {
-      console.error("Error updating banner:", err);
-      alert("Gagal memperbarui banner. Silakan coba lagi.");
+      console.error("Error updating category:", err);
+      alert("Gagal memperbarui category. Silakan coba lagi.");
     } finally {
       setIsLoading(false);
     }
@@ -207,7 +207,7 @@ const BannerTable = () => {
   const handleDelete = async (bannerId) => {
     try {
       const res = await axiosInstance.delete(
-        `/api/v1/delete-banner/${bannerId}`,
+        `/api/v1/delete-category/${bannerId}`,
         {
           headers: {
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
@@ -216,11 +216,11 @@ const BannerTable = () => {
         }
       );
       if (res.status === 200) {
-        alert("Banner berhasil dihapus!");
-        fetchDataBanners();
+        alert("category berhasil dihapus!");
+        fetchDataCategories();
       }
     } catch {
-      alert("Gagal menghapus banner. Silakan coba lagi.");
+      alert("Gagal menghapus category. Silakan coba lagi.");
     }
   };
 
@@ -259,17 +259,17 @@ const BannerTable = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
-            Banner Management
+            category Management
           </h1>
           <p className="text-gray-600 mt-1">
-            Kelola banner yang ditampilkan di aplikasi
+            Kelola category yang ditampilkan di aplikasi
           </p>
         </div>
         <button
           onClick={handleOpenModal}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
         >
-          + Tambah Banner
+          + Tambah category
         </button>
       </div>
 
@@ -287,7 +287,7 @@ const BannerTable = () => {
                   Preview
                 </th>
                 <th className="text-left py-3 px-4 font-medium text-gray-900">
-                  Nama Banner
+                  Nama category
                 </th>
                 <th className="text-left py-3 px-4 font-medium text-gray-900">
                   Dibuat
@@ -303,9 +303,9 @@ const BannerTable = () => {
 
             {/* Table Body */}
             <tbody className="divide-y divide-gray-200">
-              {currentItems.map((banner, index) => (
+              {currentItems.map((category, index) => (
                 <tr
-                  key={banner.id}
+                  key={category.id}
                   className="hover:bg-gray-50 transition-colors"
                 >
                   {/* Nomor */}
@@ -317,8 +317,8 @@ const BannerTable = () => {
                   <td className="py-4 px-4">
                     <div className="w-20 h-12 rounded-lg overflow-hidden bg-gray-100">
                       <img
-                        src={banner.imageUrl}
-                        alt={banner.name}
+                        src={category.imageUrl}
+                        alt={category.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.target.style.display = "none";
@@ -331,27 +331,27 @@ const BannerTable = () => {
                     </div>
                   </td>
 
-                  {/* Nama Banner */}
+                  {/* Nama category */}
                   <td className="py-4 px-4">
                     <div className="font-medium text-gray-900">
-                      {banner.name}
+                      {category.name}
                     </div>
                     <div
                       className="text-sm text-gray-500 truncate max-w-xs"
-                      title={banner.imageUrl}
+                      title={category.imageUrl}
                     >
-                      {banner.imageUrl}
+                      {category.imageUrl}
                     </div>
                   </td>
 
                   {/* Created At */}
                   <td className="py-4 px-4 text-sm text-gray-600">
-                    {formatDate(banner.createdAt)}
+                    {formatDate(category.createdAt)}
                   </td>
 
                   {/* Updated At */}
                   <td className="py-4 px-4 text-sm text-gray-600">
-                    {formatDate(banner.updatedAt)}
+                    {formatDate(category.updatedAt)}
                   </td>
 
                   {/* Actions */}
@@ -359,7 +359,7 @@ const BannerTable = () => {
                     <div className="flex items-center justify-center space-x-2">
                       {/* View Button */}
                       <button
-                        onClick={() => handleOpenPreview(banner)}
+                        onClick={() => handleOpenPreview(category)}
                         className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Lihat Detail"
                       >
@@ -368,18 +368,18 @@ const BannerTable = () => {
 
                       {/* Edit Button */}
                       <button
-                        onClick={() => handleOpenEditModal(banner)}
+                        onClick={() => handleOpenEditModal(category)}
                         className="p-2 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                        title="Edit Banner"
+                        title="Edit category"
                       >
                         <Edit size={16} />
                       </button>
 
                       {/* Delete Button */}
                       <button
-                        onClick={() => handleDelete(banner.id)}
+                        onClick={() => handleDelete(category.id)}
                         className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                        title="Hapus Banner"
+                        title="Hapus category"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -411,16 +411,16 @@ const BannerTable = () => {
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Belum ada banner
+              Belum ada category
             </h3>
             <p className="text-gray-500 mb-4">
-              Mulai dengan menambahkan banner pertama Anda
+              Mulai dengan menambahkan category pertama Anda
             </p>
             <button
               onClick={handleOpenModal}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
-              + Tambah Banner
+              + Tambah category
             </button>
           </div>
         )}
@@ -428,7 +428,7 @@ const BannerTable = () => {
           <div className="flex items-center justify-between pt-4">
             <div className="text-sm text-muted-foreground">
               Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of{" "}
-              {totalItems} banners
+              {totalItems} categories
             </div>
             <div className="flex items-center gap-4">
               {/* Pagination Controls */}
@@ -497,14 +497,14 @@ const BannerTable = () => {
         </div>
       </div>
 
-      {/* Modal Tambah Banner */}
+      {/* Modal Tambah category */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
-                Tambah Banner Baru
+                Tambah category Baru
               </h2>
               <button
                 onClick={handleCloseModal}
@@ -516,13 +516,13 @@ const BannerTable = () => {
 
             {/* Modal Body */}
             <form onSubmit={handleSubmit} className="p-6">
-              {/* Nama Banner */}
+              {/* Nama category */}
               <div className="mb-6">
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Nama Banner *
+                  Nama category *
                 </label>
                 <input
                   type="text"
@@ -530,7 +530,7 @@ const BannerTable = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="Masukkan nama banner"
+                  placeholder="Masukkan nama category"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   required
                 />
@@ -542,7 +542,7 @@ const BannerTable = () => {
                   htmlFor="imageUrl"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  URL Gambar Banner *
+                  URL Gambar category *
                 </label>
                 <input
                   type="url"
@@ -565,7 +565,7 @@ const BannerTable = () => {
                   <div className="relative w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
                     <img
                       src={formData.imageUrl}
-                      alt="Preview Banner"
+                      alt="Preview category"
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.target.style.display = "none";
@@ -601,7 +601,7 @@ const BannerTable = () => {
                   disabled={isLoading}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {isLoading ? "Menyimpan..." : "Simpan Banner"}
+                  {isLoading ? "Menyimpan..." : "Simpan category"}
                 </button>
               </div>
             </form>
@@ -609,14 +609,14 @@ const BannerTable = () => {
         </div>
       )}
 
-      {/* Modal Edit Banner */}
-      {isEditModalOpen && selectedBanner && (
+      {/* Modal Edit category */}
+      {isEditModalOpen && selectedCategory && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
-                Edit Banner
+                Edit category
               </h2>
               <button
                 onClick={handleCloseEditModal}
@@ -628,13 +628,13 @@ const BannerTable = () => {
 
             {/* Modal Body */}
             <form onSubmit={handleEditSubmit} className="p-6">
-              {/* Nama Banner */}
+              {/* Nama category */}
               <div className="mb-6">
                 <label
                   htmlFor="edit-name"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Nama Banner *
+                  Nama category *
                 </label>
                 <input
                   type="text"
@@ -642,19 +642,19 @@ const BannerTable = () => {
                   name="name"
                   value={editFormData.name}
                   onChange={handleEditInputChange}
-                  placeholder="Masukkan nama banner"
+                  placeholder="Masukkan nama category"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   required
                 />
               </div>
 
-              {/* URL Gambar Banner */}
+              {/* URL Gambar category */}
               <div className="mb-6">
                 <label
                   htmlFor="edit-imageUrl"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  URL Gambar Banner *
+                  URL Gambar category *
                 </label>
                 <input
                   type="url"
@@ -680,7 +680,7 @@ const BannerTable = () => {
                   <div className="relative w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
                     <img
                       src={editFormData.imageUrl}
-                      alt="Preview Banner"
+                      alt="Preview category"
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.target.style.display = "none";
@@ -708,7 +708,7 @@ const BannerTable = () => {
                 </label>
                 <div className="bg-gray-50 rounded-lg p-3">
                   <p className="text-sm text-gray-600 break-all">
-                    {selectedBanner.imageUrl}
+                    {selectedCategory.imageUrl}
                   </p>
                 </div>
               </div>
@@ -728,7 +728,7 @@ const BannerTable = () => {
                   disabled={isLoading}
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {isLoading ? "Menyimpan..." : "Perbarui Banner"}
+                  {isLoading ? "Menyimpan..." : "Perbarui category"}
                 </button>
               </div>
             </form>
@@ -736,14 +736,14 @@ const BannerTable = () => {
         </div>
       )}
 
-      {/* Modal Preview Banner */}
-      {isPreviewModalOpen && selectedBanner && (
+      {/* Modal Preview category */}
+      {isPreviewModalOpen && selectedCategory && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
-                Preview Banner
+                Preview category
               </h2>
               <button
                 onClick={handleClosePreview}
@@ -759,12 +759,12 @@ const BannerTable = () => {
                 {/* Image Preview */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium text-gray-900">
-                    Gambar Banner
+                    Gambar category
                   </h3>
                   <div className="relative bg-gray-100 rounded-lg overflow-hidden">
                     <img
-                      src={selectedBanner.imageUrl}
-                      alt={selectedBanner.name}
+                      src={selectedCategory.imageUrl}
+                      alt={selectedCategory.name}
                       className="w-full h-auto max-h-80 object-contain"
                       onError={(e) => {
                         e.target.style.display = "none";
@@ -785,11 +785,11 @@ const BannerTable = () => {
                       URL Gambar:
                     </p>
                     <p className="text-sm text-gray-600 break-all">
-                      {selectedBanner.imageUrl}
+                      {selectedCategory.imageUrl}
                     </p>
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(selectedBanner.imageUrl);
+                        navigator.clipboard.writeText(selectedCategory.imageUrl);
                         alert("URL berhasil disalin!");
                       }}
                       className="mt-2 text-xs text-blue-600 hover:text-blue-800 transition-colors"
@@ -799,22 +799,22 @@ const BannerTable = () => {
                   </div>
                 </div>
 
-                {/* Banner Details */}
+                {/* category Details */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium text-gray-900">
-                    Detail Banner
+                    Detail category
                   </h3>
 
-                  {/* Banner Info */}
+                  {/* category Info */}
                   <div className="space-y-4">
                     <div className="bg-gray-50 rounded-lg p-4">
                       <div className="grid grid-cols-1 gap-3">
                         <div>
                           <p className="text-sm font-medium text-gray-700">
-                            Nama Banner
+                            Nama category
                           </p>
                           <p className="text-sm text-gray-900 font-medium">
-                            {selectedBanner.name}
+                            {selectedCategory.name}
                           </p>
                         </div>
 
@@ -823,7 +823,7 @@ const BannerTable = () => {
                             Tanggal Dibuat
                           </p>
                           <p className="text-sm text-gray-600">
-                            {formatDate(selectedBanner.createdAt)}
+                            {formatDate(selectedCategory.createdAt)}
                           </p>
                         </div>
 
@@ -832,22 +832,22 @@ const BannerTable = () => {
                             Terakhir Diperbarui
                           </p>
                           <p className="text-sm text-gray-600">
-                            {formatDate(selectedBanner.updatedAt)}
+                            {formatDate(selectedCategory.updatedAt)}
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Status Banner */}
+                    {/* Status category */}
                     <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                       <div className="flex items-center">
                         <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                         <p className="text-sm font-medium text-green-800">
-                          Status: Banner Aktif
+                          Status: category Aktif
                         </p>
                       </div>
                       <p className="text-sm text-green-600 mt-1">
-                        Banner ini sedang ditampilkan di aplikasi
+                        category ini sedang ditampilkan di aplikasi
                       </p>
                     </div>
 
@@ -860,16 +860,16 @@ const BannerTable = () => {
                         <button
                           onClick={() => {
                             handleClosePreview();
-                            handleOpenEditModal(selectedBanner);
+                            handleOpenEditModal(selectedCategory);
                           }}
                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"
                         >
                           <Edit size={16} className="inline mr-2" />
-                          Edit Banner
+                          Edit category
                         </button>
                         <button className="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors">
                           <Trash2 size={16} className="inline mr-2" />
-                          Hapus Banner
+                          Hapus category
                         </button>
                       </div>
                     </div>
@@ -880,7 +880,7 @@ const BannerTable = () => {
                         Informasi Tambahan
                       </h4>
                       <ul className="text-sm text-blue-800 space-y-1">
-                        <li>• Banner ini dapat dilihat oleh semua pengguna</li>
+                        <li>• category ini dapat dilihat oleh semua pengguna</li>
                         <li>• Ukuran gambar optimal: 1920x1080 piksel</li>
                         <li>• Format yang didukung: JPG, PNG, JPEG</li>
                       </ul>
@@ -901,11 +901,11 @@ const BannerTable = () => {
               <button
                 onClick={() => {
                   handleClosePreview();
-                  handleOpenEditModal(selectedBanner);
+                  handleOpenEditModal(selectedCategory);
                 }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Edit Banner
+                Edit category
               </button>
             </div>
           </div>
@@ -915,4 +915,4 @@ const BannerTable = () => {
   );
 };
 
-export default BannerTable;
+export default CategoryTable;

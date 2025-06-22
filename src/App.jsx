@@ -13,6 +13,8 @@ import CartPage from "./pages/CartPage";
 import HomeAdmin from "./pages/Admin/HomeAdmin";
 import UsersPageAdmin from "./pages/Admin/UsersPageAdmin";
 import BannerPageAdmin from "./pages/Admin/BannerPageAdmin";
+import PromoPageAdmin from "./pages/Admin/PromoPageAdmin";
+import CategoryPageAdmin from "./pages/Admin/CategoryPageAdmin";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -60,6 +62,22 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/admin/promo"
+            element= {
+              <PrivateRoute>
+                <PromoPageAdmin />
+              </PrivateRoute>
+            }
+           />
+           <Route
+            path="/admin/category"
+            element= {
+              <PrivateRoute>
+                <CategoryPageAdmin />
+              </PrivateRoute>
+            }
+           />
         </Routes>
       </BrowserRouter>
     </>

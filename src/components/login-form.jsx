@@ -39,7 +39,7 @@ export function LoginForm({ className, ...props }) {
         localStorage.setItem("token", result.token);
         dispatch(setProfilePictureUrl(result.data.profilePictureUrl));
         dispatch(setIsLoggedIn(true));
-        navigate("/admin/dashboard");
+        navigate("/admin/home");
       }
     } catch (err) {
       console.error("Login failed:", err);

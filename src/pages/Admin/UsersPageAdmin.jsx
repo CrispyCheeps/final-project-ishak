@@ -110,7 +110,6 @@ export default function UsersPageAdmin() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const itemsPerPage = 10;
   const totalItems = userData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
