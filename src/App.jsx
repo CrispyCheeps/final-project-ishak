@@ -15,6 +15,7 @@ import UsersPageAdmin from "./pages/Admin/UsersPageAdmin";
 import BannerPageAdmin from "./pages/Admin/BannerPageAdmin";
 import PromoPageAdmin from "./pages/Admin/PromoPageAdmin";
 import CategoryPageAdmin from "./pages/Admin/CategoryPageAdmin";
+import ActivityiPageAdmin from "./pages/Admin/ActivityPageAdmin";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -78,6 +79,15 @@ function App() {
               </PrivateRoute>
             }
            />
+          <Route
+            path="/admin/activity"
+            element= {
+              <PrivateRoute>
+                <ActivityiPageAdmin />
+              </PrivateRoute>
+            }
+           />
+
         </Routes>
       </BrowserRouter>
     </>

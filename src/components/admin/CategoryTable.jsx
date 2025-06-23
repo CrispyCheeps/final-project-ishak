@@ -140,7 +140,7 @@ const CategoryTable = () => {
     try {
       console.log("Data yang akan disimpan:", formData);
       const res = await axiosInstance.post(
-        "/api/v1/categories",
+        "/api/v1/create-category",
         {
           name: formData.name,
           imageUrl: formData.imageUrl,
