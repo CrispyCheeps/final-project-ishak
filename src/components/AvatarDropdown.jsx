@@ -105,15 +105,6 @@ const AvatarDropdown = () => {
         {token ? (
           // Logged in menu
           <>
-            {/* <DropdownMenuItem onClick={handleProfile} className="cursor-pointer">
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSettings} className="cursor-pointer">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator /> */}
             <DropdownMenuItem
               onClick={handleLogout}
               className="cursor-pointer text-red-600 focus:text-red-600"

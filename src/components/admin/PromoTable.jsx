@@ -199,9 +199,7 @@ const PromoTable = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Promo Management
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-900">Promo Management</h1>
           <p className="text-gray-600 mt-1">
             Kelola promo promo yang ditampilkan di aplikasi
           </p>
@@ -215,11 +213,11 @@ const PromoTable = () => {
       </div>
 
       {/* Table Container - Pastikan ini yang mengatur scroll */}
-      <div className="w-full sm:w-[600px] md:w-[800px] lg:w-[1100px]">
+      <div className="w-full sm:w-[600px] md:w-[800px] lg:w-[1100px] bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         {/* Wrapper untuk scroll horizontal - KUNCI UTAMA */}
-        <div className="w-full overflow-x-auto">
+        <div className="overflow-x-auto">
           {/* Table dengan min-width yang lebih besar dari container */}
-          <table className="min-w-[1000px] w-full">
+          <table className="w-full">
             {" "}
             {/* Perbesar min-width jika perlu */}
             {/* Table Header */}
@@ -331,75 +329,75 @@ const PromoTable = () => {
             </tbody>
           </table>
         </div>
-      </div>
 
-      <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-        <div className="flex items-center justify-between pt-4">
-          <div className="text-sm text-muted-foreground">
-            Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of{" "}
-            {totalItems} banners
-          </div>
-          <div className="flex items-center gap-4">
-            {/* Pagination Controls */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={goToPrevious}
-                disabled={currentPage === 1}
-                className="h-8 w-8 p-0"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
+        <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+          <div className="flex items-center justify-between pt-4">
+            <div className="text-sm text-muted-foreground">
+              Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of{" "}
+              {totalItems} banners
+            </div>
+            <div className="flex items-center gap-4">
+              {/* Pagination Controls */}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={goToPrevious}
+                  disabled={currentPage === 1}
+                  className="h-8 w-8 p-0"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
 
-              <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, index) => {
-                  const page = index + 1;
-                  // Show current page, first page, last page, and pages around current
-                  const showPage =
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1);
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, index) => {
+                    const page = index + 1;
+                    // Show current page, first page, last page, and pages around current
+                    const showPage =
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1);
 
-                  if (!showPage && page === currentPage - 2) {
+                    if (!showPage && page === currentPage - 2) {
+                      return (
+                        <span key={page} className="px-2 text-muted-foreground">
+                          ...
+                        </span>
+                      );
+                    }
+                    if (!showPage && page === currentPage + 2) {
+                      return (
+                        <span key={page} className="px-2 text-muted-foreground">
+                          ...
+                        </span>
+                      );
+                    }
+                    if (!showPage) return null;
+
                     return (
-                      <span key={page} className="px-2 text-muted-foreground">
-                        ...
-                      </span>
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => goToPage(page)}
+                        className="h-8 w-8 p-0"
+                      >
+                        {page}
+                      </Button>
                     );
-                  }
-                  if (!showPage && page === currentPage + 2) {
-                    return (
-                      <span key={page} className="px-2 text-muted-foreground">
-                        ...
-                      </span>
-                    );
-                  }
-                  if (!showPage) return null;
+                  })}
+                </div>
 
-                  return (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => goToPage(page)}
-                      className="h-8 w-8 p-0"
-                    >
-                      {page}
-                    </Button>
-                  );
-                })}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={goToNext}
+                  disabled={currentPage === totalPages}
+                  className="h-8 w-8 p-0"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
               </div>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={goToNext}
-                disabled={currentPage === totalPages}
-                className="h-8 w-8 p-0"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
             </div>
           </div>
         </div>

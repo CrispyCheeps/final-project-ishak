@@ -52,12 +52,6 @@ export function LoginForm({ className, ...props }) {
       {...props}
       onSubmit={handleSubmit}
     >
-      {/* <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Login to your account</h1>
-        <p className="text-muted-foreground text-sm text-balance">
-          Enter your email below to login to your account
-        </p>
-      </div> */}
       <p className="text-center text-[#939393]">Hola!</p>
       <div className="grid border border-[#2BAE91] p-12 rounded-3xl gap-6 ">
         <div className="grid gap-3">

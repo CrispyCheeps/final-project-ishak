@@ -2,7 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import PrivateRoute from "./routes/PrivateRoute";
@@ -65,29 +65,30 @@ function App() {
           />
           <Route
             path="/admin/promo"
-            element= {
+            element={
               <PrivateRoute>
                 <PromoPageAdmin />
               </PrivateRoute>
             }
-           />
-           <Route
+          />
+          <Route
             path="/admin/category"
-            element= {
+            element={
               <PrivateRoute>
                 <CategoryPageAdmin />
               </PrivateRoute>
             }
-           />
+          />
           <Route
             path="/admin/activity"
-            element= {
+            element={
               <PrivateRoute>
                 <ActivityiPageAdmin />
               </PrivateRoute>
             }
-           />
+          />
 
+          <Route path="*" element={<Navigate to="/beranda" replace />} />
         </Routes>
       </BrowserRouter>
     </>

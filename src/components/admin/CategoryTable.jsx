@@ -33,7 +33,7 @@ const CategoryTable = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [editImagePreview, setEditImagePreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [dataBanner, setDataBanner] = useState([]);
+  const [dataCategories, setDataCategories] = useState([]);
 
   const fetchDataCategories = () => {
     axios
@@ -44,7 +44,7 @@ const CategoryTable = () => {
       })
       .then((res) => {
         console.log("Data categories:", res.data.data);
-        setDataBanner(res.data.data);
+        setDataCategories(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -204,10 +204,10 @@ const CategoryTable = () => {
     }
   };
 
-  const handleDelete = async (bannerId) => {
+  const handleDelete = async (categoryId) => {
     try {
       const res = await axiosInstance.delete(
-        `/api/v1/delete-category/${bannerId}`,
+        `/api/v1/delete-category/${categoryId}`,
         {
           headers: {
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
@@ -228,13 +228,13 @@ const CategoryTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 5;
-  const totalItems = dataBanner.length;
+  const totalItems = dataCategories.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   // Calculate current items to display
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = dataBanner.slice(startIndex, endIndex);
+  const currentItems = dataCategories.slice(startIndex, endIndex);
 
   // Pagination handlers
   const goToPage = (page) => {
@@ -393,7 +393,7 @@ const CategoryTable = () => {
         </div>
 
         {/* Empty State */}
-        {dataBanner.length === 0 && (
+        {dataCategories.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
               <svg
@@ -424,6 +424,7 @@ const CategoryTable = () => {
             </button>
           </div>
         )}
+        
         <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
           <div className="flex items-center justify-between pt-4">
             <div className="text-sm text-muted-foreground">

@@ -25,7 +25,7 @@ const ActivityTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [selectedActivity, setSelectedActivity] = useState({});
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const numericFields = ["price", "price_discount", "rating", "total_reviews"];
@@ -191,14 +191,18 @@ const ActivityTable = () => {
     let newValue = value;
 
     if (numericFields.includes(name)) {
-      newValue = value === "" ? 0 : Number(value);
+      const cleaned = value.replace(/^0+(?!$)/, ""); // hapus nol di depan kecuali jika hanya '0'
+      newValue = cleaned === "" ? 0 : Number(cleaned);
     } else if (arrayFields.includes(name)) {
       newValue = value
         .split(",")
         .map((item) => item.trim())
         .filter((item) => item !== ""); // buang item kosong
+    } else if (name === "location_maps") {
+      // Ambil hanya isi src=""
+      const match = value.match(/src="([^"]+)"/);
+      newValue = match ? match[1] : value; // fallback ke value as-is
     }
-
     setFormData((prev) => ({
       ...prev,
       [name]: newValue,
@@ -296,6 +300,10 @@ const ActivityTable = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const unescapeIframe = (escapedStr) => {
+    return escapedStr.replace(/\\"/g, '"');
   };
 
   const handleDelete = async (activityId) => {
@@ -713,14 +721,17 @@ const ActivityTable = () => {
                     </div>
 
                     {/* Image Preview */}
-                    {formData.imageUrls && (
+
+                    {formData.imageUrls &&
+                    formData.imageUrls.length > 0 &&
+                    formData.imageUrls[0] ? (
                       <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Preview Gambar
                         </label>
                         <div className="relative bg-gray-100 rounded-lg overflow-hidden">
                           <img
-                            src={formData.imageUrls}
+                            src={formData.imageUrls[0]}
                             alt="Preview"
                             className="w-full h-48 object-cover"
                             onError={(e) => {
@@ -733,6 +744,18 @@ const ActivityTable = () => {
                               <ImageIcon size={48} className="mx-auto mb-2" />
                               <p>Gambar tidak dapat dimuat</p>
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Preview Gambar
+                        </label>
+                        <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
+                          <div className="text-center">
+                            <ImageIcon size={48} className="mx-auto mb-2" />
+                            <p>Tidak ada gambar untuk ditampilkan</p>
                           </div>
                         </div>
                       </div>
@@ -754,7 +777,9 @@ const ActivityTable = () => {
                         <input
                           type="number"
                           name="price"
-                          value={formData.price}
+                          value={formData.price
+                            ?.toString()
+                            .replace(/^0+(?!$)/, "")}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="100000"
@@ -770,7 +795,9 @@ const ActivityTable = () => {
                         <input
                           type="number"
                           name="price_discount"
-                          value={formData.price_discount}
+                          value={formData.price_discount
+                            ?.toString()
+                            .replace(/^0+(?!$)/, "")}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="80000"
@@ -783,19 +810,23 @@ const ActivityTable = () => {
                     {formData && (
                       <div className="mt-3 p-3 bg-white rounded-lg border">
                         <p className="text-sm text-gray-600">Preview Harga:</p>
+
+                        {/* Hitung harga final */}
                         <div className="flex items-center space-x-2">
                           <span className="text-lg font-semibold text-blue-900">
                             Rp{" "}
-                            {parseInt(
-                              formData?.price_discount || 0
+                            {Math.max(
+                              (formData?.price || 0) -
+                                (formData?.price_discount || 0),
+                              0
                             ).toLocaleString("id-ID")}
                           </span>
-                          {formData?.price !== formData?.price_discount && (
+
+                          {/* Tampilkan harga asli dengan coretan jika ada diskon */}
+                          {formData?.price_discount > 0 && (
                             <span className="text-sm text-gray-500 line-through">
                               Rp{" "}
-                              {parseInt(formData?.price || 0).toLocaleString(
-                                "id-ID"
-                              )}
+                              {(formData?.price || 0).toLocaleString("id-ID")}
                             </span>
                           )}
                         </div>
@@ -920,7 +951,9 @@ const ActivityTable = () => {
                         <input
                           type="number"
                           name="total_reviews"
-                          value={formData.total_reviews}
+                          value={formData.total_reviews
+                            ?.toString()
+                            .replace(/^0+(?!$)/, "")}
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 border border-yellow-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                           placeholder="100"
@@ -979,9 +1012,7 @@ const ActivityTable = () => {
                         placeholder="<p>WiFi gratis</p><p>Parking area</p><p>Wheelchair accessible</p>"
                       />
                       <p className="text-xs text-purple-600 mt-1">
-                        Gunakan HTML tags untuk formatting (contoh:
-                        &lt;p&gt;Fasilitas&lt;/p&gt;). Kosongkan jika tidak ada
-                        fasilitas.
+                        Kosongkan jika tidak ada fasilitas.
                       </p>
                     </div>
 
@@ -1530,6 +1561,7 @@ const ActivityTable = () => {
                   </div>
 
                   {/* Location Map */}
+                  {console.log(selectedActivity.location_maps)}
                   <div>
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
                       Lokasi
@@ -1537,7 +1569,9 @@ const ActivityTable = () => {
                     <div className="bg-gray-100 rounded-lg overflow-hidden">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: selectedActivity.location_maps,
+                          __html: unescapeIframe(
+                            selectedActivity.location_maps
+                          ),
                         }}
                         className="w-full"
                       />
