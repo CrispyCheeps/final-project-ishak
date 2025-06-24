@@ -25,19 +25,23 @@ const ActivityTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [selectedActivity, setselectedActivity] = useState(null);
+  const [selectedActivity, setSelectedActivity] = useState(null);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const numericFields = ["price", "price_discount", "rating", "total_reviews"];
+  const arrayFields = ["imageUrls"];
+
   const [formData, setFormData] = useState({
     categoryId: "",
     title: "",
     description: "",
     imageUrls: [],
-    price: "",
-    price_discount: "",
-    rating: "",
+    price: 0,
+    price_discount: 0,
+    rating: 0,
+    total_reviews: 0,
+    facilities: "",
     address: "",
-    city: "",
     province: "",
     city: "",
     location_maps: "",
@@ -47,13 +51,14 @@ const ActivityTable = () => {
     title: "",
     description: "",
     imageUrls: [],
-    price: "",
-    price_discount: "",
-    rating: "",
+    price: 0,
+    price_discount: 0,
+    rating: 0,
+    total_reviews: 0,
+    facilities: "",
     address: "",
     city: "",
     province: "",
-    city: "",
     location_maps: "",
   });
   const [imagePreview, setImagePreview] = useState(null);
@@ -129,15 +134,17 @@ const ActivityTable = () => {
 
   const handleOpenEditModal = (activity) => {
     console.log("Opening edit modal for activity:", activity);
-    setselectedActivity(activity);
+    setSelectedActivity(activity);
     setEditFormData({
       categoryId: activity.categoryId || "",
       title: activity.title || "",
       description: activity.description || "",
       imageUrls: activity.imageUrls || [],
-      price: activity.price || "",
-      price_discount: activity.price_discount || "",
-      rating: activity.rating || "",
+      price: activity.price ?? 0,
+      price_discount: activity.price_discount ?? 0,
+      rating: activity.rating ?? 0,
+      total_reviews: activity.total_reviews ?? 0,
+      facilities: activity.facilities || "",
       address: activity.address || "",
       city: activity.city || "",
       province: activity.province || "",
@@ -149,15 +156,17 @@ const ActivityTable = () => {
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
-    setselectedActivity(null);
+    setSelectedActivity(null);
     setEditFormData({
       categoryId: "",
       title: "",
       description: "",
       imageUrls: [],
-      price: "",
-      price_discount: "",
-      rating: "",
+      price: 0,
+      price_discount: 0,
+      rating: 0,
+      total_reviews: 0,
+      facilities: "",
       address: "",
       city: "",
       province: "",
@@ -167,28 +176,59 @@ const ActivityTable = () => {
   };
 
   const handleOpenPreview = (activity) => {
-    setselectedActivity(activity);
+    setSelectedActivity(activity);
     setIsPreviewModalOpen(true);
   };
 
   const handleClosePreview = () => {
     setIsPreviewModalOpen(false);
-    setselectedActivity(null);
+    setSelectedActivity(null);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    let newValue = value;
+
+    if (numericFields.includes(name)) {
+      newValue = value === "" ? 0 : Number(value);
+    } else if (arrayFields.includes(name)) {
+      newValue = value
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item !== ""); // buang item kosong
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
+
+    let newValue = value;
+
+    if (numericFields.includes(name)) {
+      newValue = value === "" ? 0 : Number(value);
+    } else if (arrayFields.includes(name)) {
+      // Cek apakah sudah array atau string
+      if (typeof value === "string") {
+        newValue = value
+          .split(",")
+          .map((item) => item.trim())
+          .filter((item) => item !== "");
+      } else if (Array.isArray(value)) {
+        newValue = value;
+      } else {
+        newValue = [];
+      }
+    }
+
     setEditFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
@@ -740,20 +780,22 @@ const ActivityTable = () => {
                     </div>
 
                     {/* Price Preview */}
-                    {formData.price && formData.price_discount && (
+                    {formData && (
                       <div className="mt-3 p-3 bg-white rounded-lg border">
                         <p className="text-sm text-gray-600">Preview Harga:</p>
                         <div className="flex items-center space-x-2">
                           <span className="text-lg font-semibold text-blue-900">
                             Rp{" "}
-                            {parseInt(formData.price_discount).toLocaleString(
-                              "id-ID"
-                            )}
+                            {parseInt(
+                              formData?.price_discount || 0
+                            ).toLocaleString("id-ID")}
                           </span>
-                          {formData.price !== formData.price_discount && (
+                          {formData?.price !== formData?.price_discount && (
                             <span className="text-sm text-gray-500 line-through">
                               Rp{" "}
-                              {parseInt(formData.price).toLocaleString("id-ID")}
+                              {parseInt(formData?.price || 0).toLocaleString(
+                                "id-ID"
+                              )}
                             </span>
                           )}
                         </div>
@@ -888,25 +930,30 @@ const ActivityTable = () => {
                     </div>
 
                     {/* Rating Preview */}
-                    {formData.rating && (
-                      <div className="mt-3 p-3 bg-white rounded-lg border">
-                        <p className="text-sm text-gray-600">Preview Rating:</p>
-                        <div className="flex items-center space-x-2">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                size={16}
-                                className={
-                                  i < parseInt(formData.rating)
-                                    ? "text-yellow-400 fill-current"
-                                    : "text-gray-300"
-                                }
-                              />
-                            ))}
-                          </div>
-                          <span className="text-sm text-gray-600">
-                            ({formData.total_reviews} reviews)
+                    {/* Rating Preview */}
+                    {formData && (
+                      <div className="mt-4 p-3 bg-white rounded-lg border border-yellow-200">
+                        <p className="text-sm text-yellow-800 mb-2">
+                          Preview Penilaian:
+                        </p>
+                        <div className="flex flex-col gap-1 text-yellow-900 text-sm">
+                          <span>
+                            Rating:{" "}
+                            <strong>
+                              {formData.rating
+                                ? `${formData.rating} / 5`
+                                : "Belum dipilih"}
+                            </strong>
+                          </span>
+                          <span>
+                            Total Ulasan:{" "}
+                            <strong>
+                              {typeof formData.total_reviews === "number"
+                                ? `${formData.total_reviews.toLocaleString(
+                                    "id-ID"
+                                  )} ulasan`
+                                : "0 ulasan"}
+                            </strong>
                           </span>
                         </div>
                       </div>
@@ -1211,14 +1258,17 @@ const ActivityTable = () => {
                         <div className="flex items-center space-x-2">
                           <span className="text-lg font-semibold text-blue-900">
                             Rp{" "}
-                            {parseInt(editFormData.price_discount).toLocaleString(
-                              "id-ID"
-                            )}
+                            {parseInt(
+                              editFormData.price_discount
+                            ).toLocaleString("id-ID")}
                           </span>
-                          {editFormData.price !== editFormData.price_discount && (
+                          {editFormData.price !==
+                            editFormData.price_discount && (
                             <span className="text-sm text-gray-500 line-through">
                               Rp{" "}
-                              {parseInt(editFormData.price).toLocaleString("id-ID")}
+                              {parseInt(editFormData.price).toLocaleString(
+                                "id-ID"
+                              )}
                             </span>
                           )}
                         </div>
