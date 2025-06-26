@@ -74,26 +74,38 @@ export default function LihatActivity() {
 
   const navigate = useNavigate();
 
-  const handleAddToCart = () => {
-    let token = localStorage.getItem("token");
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem("token");
+
     if (!token) {
       alert("Please log in to add items to your cart.");
       navigate("/");
+      return;
     }
 
-    axios
-      .post("/api/v1/add-cart", {
-        headers: {
-          apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+    try {
+      const response = await axios.post(
+        "/api/v1/add-cart",
+        {
+          activityId: id,
         },
-      })
-      .then((res) => {
-        console.log("Item added to cart:", res.data);
-      })
-      .catch((err) => {
-        console.error("Error adding item to cart:", err);
-        alert("Failed to add item to cart. Please try again.");
-      });
+        {
+          headers: {
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Item added to cart:", response.data);
+      alert("Item successfully added to your cart!");
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+      alert(
+        error?.response?.data?.message ||
+          "Failed to add item to cart. Please try again."
+      );
+    }
   };
 
   const formatPrice = (price) =>
@@ -292,26 +304,9 @@ export default function LihatActivity() {
                   </div>
                 )}
               </div>
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Number of Guests
-                </label>
-                <div className="flex items-center space-x-4">
-                  <button className="w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-50">
-                    -
-                  </button>
-                  <span className="text-lg font-medium">2</span>
-                  <button className="w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-50">
-                    +
-                  </button>
-                </div>
-              </div>
-              <button className="w-full bg-blue-600 text-white font-semibold py-4 rounded-lg hover:bg-blue-700 transition-colors mb-4">
-                Book Now
-              </button>
               <button
                 onClick={handleAddToCart}
-                className="w-full border border-gray-300 text-gray-700 font-semibold py-4 rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full bg-[#2BAE91] text-white font-semibold py-4 rounded-lg hover:bg-blue-700 transition-colors mb-4"
               >
                 Add to Cart
               </button>

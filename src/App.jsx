@@ -16,6 +16,7 @@ import BannerPageAdmin from "./pages/Admin/BannerPageAdmin";
 import PromoPageAdmin from "./pages/Admin/PromoPageAdmin";
 import CategoryPageAdmin from "./pages/Admin/CategoryPageAdmin";
 import ActivityiPageAdmin from "./pages/Admin/ActivityPageAdmin";
+import MyPurchase from "./pages/MyPurchase";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -84,6 +85,14 @@ function App() {
             element={
               <PrivateRoute>
                 <ActivityiPageAdmin />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/purchased"
+            element={
+              <PrivateRoute>
+                <MyPurchase />
               </PrivateRoute>
             }
           />
