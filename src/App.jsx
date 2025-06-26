@@ -16,6 +16,8 @@ import BannerPageAdmin from "./pages/Admin/BannerPageAdmin";
 import PromoPageAdmin from "./pages/Admin/PromoPageAdmin";
 import CategoryPageAdmin from "./pages/Admin/CategoryPageAdmin";
 import ActivityiPageAdmin from "./pages/Admin/ActivityPageAdmin";
+import { SignupForm } from "./components/SignUpForm";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -25,6 +27,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           {/* <Route path='/register' element={<RegisterP}></Route> */}
 
           <Route path="/beranda" element={<MainPage />}></Route>
