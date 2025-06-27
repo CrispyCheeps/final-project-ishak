@@ -31,7 +31,7 @@ import {
   setError,
 } from "@/features/mainPage/PromosSlice";
 import PromoCard from "@/components/PromoCard";
-import Footer from "@/components/footer";
+import Footer from "@/components/Footer";
 import ActivityCard from "@/components/ActivityCard";
 import CategoryCard from "@/components/CategoryCard";
 import { useNavigate } from "react-router-dom";
