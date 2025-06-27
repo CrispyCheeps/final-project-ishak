@@ -4,20 +4,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  loginUser,
+  signupUser,
   setEmail,
-  setIsLoggedIn,
   setPassword,
+  setName,
+  setPhoneNumber,
+  setIsLoggedIn,
   setProfilePictureUrl,
 } from "@/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-export function LoginForm({ className, ...props }) {
-  const [userSignUp, setUserSignUp] = useState(false);
+export default function SignupForm({ className, ...props }) {
+  const [userSignUp, setUserSignUp] = useState(true);
 
   const dispatch = useDispatch();
-  const { email, password, error, loading, profilePictureUrl } = useSelector(
+  const { email, password, name, phoneNumber, error, loading, profilePictureUrl } = useSelector(
     (state) => state.auth
   );
   const navigate = useNavigate();
@@ -27,12 +29,16 @@ export function LoginForm({ className, ...props }) {
     e.preventDefault();
     try {
       console.log(
-        "Submitting login with email:",
+        "Submitting signup with email:",
         email,
-        "and password:",
-        password
+        "password:",
+        password,
+        "name:",
+        name,
+        "phone:",
+        phoneNumber
       );
-      const result = await dispatch(loginUser(email, password));
+      const result = await dispatch(signupUser({ email, password, name, phoneNumber }));
       if (result?.code == 200 && result?.data.role === "user") {
         localStorage.setItem("token", result.token);
         dispatch(setProfilePictureUrl(result.data.profilePictureUrl));
@@ -45,12 +51,11 @@ export function LoginForm({ className, ...props }) {
         navigate("/admin/home");
       }
     } catch (err) {
-      console.error("Login failed:", err);
+      console.error("Signup failed:", err);
     }
   };
 
   return (
-    
     <form
       className={cn("flex flex-col", className)}
       {...props}
@@ -58,6 +63,19 @@ export function LoginForm({ className, ...props }) {
     >
       <p className="text-center text-[#939393]">Hola!</p>
       <div className="grid border border-[#2BAE91] p-12 rounded-3xl gap-6 ">
+        <div className="grid gap-3">
+          <Label className="text-[#939393]" htmlFor="name">
+            Full Name
+          </Label>
+          <Input
+            id="name"
+            type="text"
+            placeholder="John Doe"
+            onChange={(e) => dispatch(setName(e.target.value))}
+            required
+            value={name}
+          />
+        </div>
         <div className="grid gap-3">
           <Label className="text-[#939393]" htmlFor="email">
             Email
@@ -72,6 +90,19 @@ export function LoginForm({ className, ...props }) {
           />
         </div>
         <div className="grid gap-3">
+          <Label className="text-[#939393]" htmlFor="phoneNumber">
+            Phone Number
+          </Label>
+          <Input
+            id="phoneNumber"
+            type="tel"
+            placeholder="+62 812 3456 7890"
+            onChange={(e) => dispatch(setPhoneNumber(e.target.value))}
+            required
+            value={phoneNumber}
+          />
+        </div>
+        <div className="grid gap-3">
           <div className="flex items-center">
             <Label className="text-[#939393]" htmlFor="password">
               Password
@@ -80,6 +111,7 @@ export function LoginForm({ className, ...props }) {
           <Input
             id="password"
             type="password"
+            placeholder="Enter your password"
             onChange={(e) => dispatch(setPassword(e.target.value))}
             value={password}
             required
@@ -90,17 +122,15 @@ export function LoginForm({ className, ...props }) {
           type="submit"
           className="w-full bg-gradient-to-r from-[#2CAB98] to-[#329AC0] hover:bg-sky-900"
         >
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Creating account..." : "Sign Up"}
         </Button>
-        <div onClick={() => navigate("/signup")} className="text-center text-sm text-[#939393]">
-          Don&apos;t have an account?{" "}
+        <div className="text-center text-sm text-[#939393]">
+          Already have an account?{" "}
           <a href="#" className="underline underline-offset-4">
-            Sign up
+            Login
           </a>
         </div>
       </div>
     </form>
-
-    
   );
 }
