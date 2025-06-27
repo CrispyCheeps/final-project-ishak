@@ -70,8 +70,7 @@ export default function CategoryPage() {
       .then((res) => {
         setCategories(res.data.data);
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   const getByCategoryId = (categoryId) => {
@@ -88,8 +87,7 @@ export default function CategoryPage() {
           setCategories(res.data.data);
         }
       })
-      .catch((err) => {
-      })
+      .catch((err) => {})
       .finally(() => {
         setLoading(false);
       });
@@ -119,6 +117,7 @@ export default function CategoryPage() {
         {categories.length > 0 ? (
           displayedCategories.map((category) => (
             <CategoryCard
+              key={category.id}
               id={category.id}
               imageUrl={category.imageUrl}
               name={category.name}
