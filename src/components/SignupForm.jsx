@@ -68,7 +68,7 @@ export default function SignupForm() {
       if (result?.code === "200") {
         setError("");
         alert("Registration successful! Please login to continue.");
-        navigate("/");
+        navigate("/login");
       } else {
         setError(result?.message || "Signup failed. Please try again.");
       }
@@ -175,7 +175,7 @@ export default function SignupForm() {
         </Button>
         <div className="text-center text-sm text-[#939393]">
           Already have an account?{" "}
-          <a onClick={() => navigate("/")} className="underline underline-offset-4 cursor-pointer">
+          <a onClick={() => navigate("/login")} className="underline underline-offset-4 cursor-pointer">
             Login
           </a>
         </div>

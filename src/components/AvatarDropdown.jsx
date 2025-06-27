@@ -46,7 +46,7 @@ const AvatarDropdown = () => {
   }, []);
 
   const handleLogin = () => {
-    navigate("/");
+    navigate("/login");
   };
 
   const handleLogout = () => {
@@ -62,7 +62,7 @@ const AvatarDropdown = () => {
           alert("Logout berhasil");
           setUserData(null);
           localStorage.removeItem("token");
-          navigate("/beranda");
+          navigate("/");
           window.location.reload(); 
         }
       })

@@ -30,7 +30,7 @@ export function LoginForm({ className, ...props }) {
         localStorage.setItem("token", result.token);
         dispatch(setProfilePictureUrl(result.data.profilePictureUrl));
         dispatch(setIsLoggedIn(true));
-        navigate("/beranda");
+        navigate("/");
       } else if (result?.code == 200 && result?.data.role === "admin") {
         localStorage.setItem("token", result.token);
         dispatch(setProfilePictureUrl(result.data.profilePictureUrl));

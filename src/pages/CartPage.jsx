@@ -290,7 +290,7 @@ const CartPage = () => {
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => navigate("/beranda")}
+              onClick={() => navigate("/")}
               className="p-2 hover:bg-white/20 rounded-lg transition-colors"
             >
               <ArrowLeft className="h-6 w-6" />
@@ -320,7 +320,7 @@ const CartPage = () => {
               Start exploring amazing attractions and add them to your cart!
             </p>
             <button
-              onClick={() => navigate("/beranda")}
+              onClick={() => navigate("/")}
               className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               Browse Attractions

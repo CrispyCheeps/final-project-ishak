@@ -79,7 +79,7 @@ export default function LihatActivity() {
 
     if (!token) {
       alert("Please log in to add items to your cart.");
-      navigate("/");
+      navigate("/login");
       return;
     }
 

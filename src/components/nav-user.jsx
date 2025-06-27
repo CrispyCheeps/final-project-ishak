@@ -44,7 +44,7 @@ export function NavUser({ user }) {
           alert("Logout berhasil");
           setUserLoggedIn(null);
           localStorage.removeItem("token");
-          navigate("/beranda");
+          navigate("/");
           window.location.reload();
         }
       })

@@ -27,11 +27,11 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           {/* <Route path='/register' element={<RegisterP}></Route> */}
 
-          <Route path="/beranda" element={<MainPage />}></Route>
+          <Route path="/" element={<MainPage />}></Route>
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/activities" element={<ActivityPage />} />
           <Route path="/activity/:id" element={<LihatActivity />} />
@@ -108,7 +108,7 @@ function App() {
             }
           />
 
-          <Route path="*" element={<Navigate to="/beranda" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </>
