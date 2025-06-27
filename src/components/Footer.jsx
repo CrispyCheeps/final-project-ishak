@@ -9,6 +9,7 @@ import {
   Linkedin,
   ArrowRight,
 } from "lucide-react";
+import { IconBrandFacebook, IconBrandInstagram, IconBrandLinkedin, IconBrandTwitter } from "@tabler/icons-react";
 
 const Footer = () => {
   return (
@@ -43,25 +44,25 @@ const Footer = () => {
                 href="#"
                 className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-all duration-300 hover:scale-110"
               >
-                <Facebook className="w-5 h-5" />
+                <IconBrandFacebook className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-all duration-300 hover:scale-110"
               >
-                <Twitter className="w-5 h-5" />
+                <IconBrandTwitter className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-all duration-300 hover:scale-110"
               >
-                <Instagram className="w-5 h-5" />
+                <IconBrandInstagram className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-all duration-300 hover:scale-110"
               >
-                <Linkedin className="w-5 h-5" />
+                <IconBrandLinkedin className="w-5 h-5" />
               </a>
             </div>
           </div>
