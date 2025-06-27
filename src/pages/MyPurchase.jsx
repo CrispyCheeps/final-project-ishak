@@ -89,6 +89,7 @@ const MyPurchase = () => {
         setTimeout(() => {
           handleClose();
         }, 2000);
+        window.location.reload();
       } else {
         throw new Error(
           response.data.message || "Gagal mengirim bukti pembayaran"
