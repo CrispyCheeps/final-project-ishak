@@ -8,11 +8,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import axios from "@/helpers/axios";
+import { useLocation } from "react-router-dom";
 
 export default function HeroSection({ handleSearchChange, getByCategoryId }) {
   const [inputValue, setInputValue] = useState("");
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState("");
+  const location = useLocation();
+  const currentPath = location.pathname;
   const handleClickSearch = () => {
     handleSearchChange(inputValue);
   };
@@ -25,11 +28,9 @@ export default function HeroSection({ handleSearchChange, getByCategoryId }) {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setCategories(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -49,34 +50,28 @@ export default function HeroSection({ handleSearchChange, getByCategoryId }) {
             <div className="flex items-center gap-4 flex-wrap justify-center">
               {/* Dropdown - bisa pakai shadcn Popover + Button */}
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="rounded-full bg-white text-[#2BAE91] px-6 py-2 hover:bg-gray-100">
-                    <MapPin className="w-4 h-4 mr-2" /> Pilih destinasi
-                    <ChevronDown className="ml-2 w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                //   side="top" // "top" | "right" | "bottom" | "left"
-                //   align="start" // "start" | "center" | "end"
-                //   sideOffset={8} // Distance from trigger (in pixels)
-                //   alignOffset={0}
-                >
+                {currentPath !== "/categories" && (
+                  <DropdownMenuTrigger asChild>
+                    <Button className="rounded-full bg-white text-[#2BAE91] px-6 py-2 hover:bg-gray-100">
+                      <MapPin className="w-4 h-4 mr-2" /> Pilih destinasi atau
+                      category
+                      <ChevronDown className="ml-2 w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                )}
+                <DropdownMenuContent>
                   {/* Ambil dari category name di endpoint category, di mapping */}
-                  <DropdownMenuItem>Jakarta</DropdownMenuItem>
-                  {
-                    categories.map((category) => (
-                      <DropdownMenuItem
-                        key={category.id}
-                        onClick={() => {
-                          setCategoryId(category.id);
-                          getByCategoryId(category.id);
-                          console.log("Category ID:", category.id);
-                        }}
-                      >
-                        {category.name}
-                      </DropdownMenuItem>
-                    ))
-                  }
+                  {categories.map((category) => (
+                    <DropdownMenuItem
+                      key={category.id}
+                      onClick={() => {
+                        setCategoryId(category.id);
+                        getByCategoryId(category.id);
+                      }}
+                    >
+                      {category.name}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -84,7 +79,7 @@ export default function HeroSection({ handleSearchChange, getByCategoryId }) {
               <div className="flex bg-white rounded-full items-center px-4 py-2 shadow-lg w-full max-w-md">
                 <Search className="text-gray-400 w-4 h-4 mr-2" />
                 <input
-                  placeholder="Cari destinasi atau aktivitas"
+                  placeholder="Cari petualangan di..."
                   className="w-full outline-none text-gray-700"
                   onChange={(e) => setInputValue(e.target.value)}
                   value={inputValue}

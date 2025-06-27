@@ -43,12 +43,9 @@ const CategoryTable = () => {
         },
       })
       .then((res) => {
-        console.log("Data categories:", res.data.data);
         setDataCategories(res.data.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   useEffect(() => {
@@ -138,7 +135,6 @@ const CategoryTable = () => {
     setIsLoading(true);
 
     try {
-      console.log("Data yang akan disimpan:", formData);
       const res = await axiosInstance.post(
         "/api/v1/create-category",
         {
@@ -152,11 +148,8 @@ const CategoryTable = () => {
           },
         }
       );
-
-      console.log("category created:", res.data);
       alert("category berhasil ditambahkan!");
       handleCloseModal();
-      console.log("Response dari server:", res.data);
     } catch (error) {
       console.error("Error creating category:", err);
       alert("Gagal menambahkan category. Silakan coba lagi.");
@@ -176,8 +169,6 @@ const CategoryTable = () => {
     setIsLoading(true);
 
     try {
-      console.log("Data yang akan diupdate:", editFormData);
-
       const res = await axiosInstance.post(
         `/api/v1/update-category/${editFormData.id}`, // Ganti sesuai dengan field ID-nya
         {
@@ -192,7 +183,6 @@ const CategoryTable = () => {
         }
       );
 
-      console.log("category updated:", res.data);
       alert("category berhasil diperbarui!");
       handleCloseEditModal();
       fetchDataCategories(); // Refresh data after update
@@ -383,7 +373,6 @@ const CategoryTable = () => {
                       >
                         <Trash2 size={16} />
                       </button>
-
                     </div>
                   </td>
                 </tr>
@@ -424,7 +413,7 @@ const CategoryTable = () => {
             </button>
           </div>
         )}
-        
+
         <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
           <div className="flex items-center justify-between pt-4">
             <div className="text-sm text-muted-foreground">
@@ -790,7 +779,9 @@ const CategoryTable = () => {
                     </p>
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(selectedCategory.imageUrl);
+                        navigator.clipboard.writeText(
+                          selectedCategory.imageUrl
+                        );
                         alert("URL berhasil disalin!");
                       }}
                       className="mt-2 text-xs text-blue-600 hover:text-blue-800 transition-colors"
@@ -881,7 +872,9 @@ const CategoryTable = () => {
                         Informasi Tambahan
                       </h4>
                       <ul className="text-sm text-blue-800 space-y-1">
-                        <li>• category ini dapat dilihat oleh semua pengguna</li>
+                        <li>
+                          • category ini dapat dilihat oleh semua pengguna
+                        </li>
                         <li>• Ukuran gambar optimal: 1920x1080 piksel</li>
                         <li>• Format yang didukung: JPG, PNG, JPEG</li>
                       </ul>

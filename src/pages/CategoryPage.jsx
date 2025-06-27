@@ -28,10 +28,9 @@ export default function CategoryPage() {
   });
 
   const displayedCategories = showAllItems
-    ? categories
-    : categories.slice(0, itemsToShow);
+    ? filteredCategories
+    : filteredCategories.slice(0, itemsToShow);
 
-  console.log(displayedCategories);
   const handleSearchChange = (query) => {
     setSearchQuery(query);
   };
@@ -69,11 +68,9 @@ export default function CategoryPage() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setCategories(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -86,14 +83,12 @@ export default function CategoryPage() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         if (res.data.code == "200") {
           setCategories(res.data.data);
         }
       })
       .catch((err) => {
-        console.log(err);
       })
       .finally(() => {
         setLoading(false);

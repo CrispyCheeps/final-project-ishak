@@ -84,14 +84,12 @@ export default function MainPage() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setLoadingPromo(false);
         if (res.data.code == "200") {
           setActivities(res.data.data);
         }
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
       })
       .finally(() => {
@@ -107,11 +105,9 @@ export default function MainPage() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setCategories(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -172,7 +168,7 @@ export default function MainPage() {
                 {/* Dropdown - bisa pakai shadcn Popover + Button */}
                 <Button
                   onClick={() => navigate("/categories")}
-                  className="rounded-full bg-white text-[#2BAE91] px-6 py-2 hover:bg-gray-100"
+                  className="rounded-full bg-white text-[#2BAE91] px-6 py-2 hover:bg-gray-100 cursor-pointer"
                 >
                   <MapPin className="w-4 h-4 mr-2" /> Lihat destinasi
                   <ChevronDown className="ml-2 w-4 h-4" />
@@ -188,7 +184,7 @@ export default function MainPage() {
                   />
                   <Button
                     onClick={() => navigate("/activities")}
-                    className="ml-2 rounded-full bg-[#2BAE91] hover:bg-[#329AC0] text-white px-6"
+                    className="ml-2 rounded-full bg-[#2BAE91] hover:bg-[#329AC0] text-white px-6 cursor-pointer"
                   >
                     Cari
                   </Button>

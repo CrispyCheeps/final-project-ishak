@@ -74,14 +74,12 @@ export default function ActivityPage() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         if (res.data.code == "200") {
           setActivities(res.data.data);
         }
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
       })
       .finally(() => {
@@ -97,14 +95,12 @@ export default function ActivityPage() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         if (res.data.code == "200") {
           setActivities(res.data.data);
         }
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
       })
       .finally(() => {
@@ -125,14 +121,12 @@ export default function ActivityPage() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         if (res.data.code == "200") {
           setActivities(res.data.data);
         }
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
       })
       .finally(() => {
@@ -147,9 +141,6 @@ export default function ActivityPage() {
       getActivities();
     }
   }, [categoryIdParam]);
-
-  console.log("Filtered Activities:", filteredActivities);
-  console.log("Displayed Activities:", displayedActivities);
 
   return (
     <>

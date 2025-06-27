@@ -102,7 +102,6 @@ const TransactionTable = () => {
         setIsUpdateDialogOpen(false);
         alert("Transaction status updated successfully!");
       }
-      console.log("Transaction status updated:", response.data);
     } catch (error) {
       console.error("Error updating transaction status:", error);
       alert("Failed to update transaction status");

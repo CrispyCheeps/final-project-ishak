@@ -15,11 +15,9 @@ export const login = (email, password) => {
       }
     )
     .then((res) => {
-      console.log(res.data); // ✅ Logs response
       return res.data;
     })
     .catch((err) => {
-      console.log(err); // ⚠️ This line will not be reached after `throw err`
       throw err;
     });
 };

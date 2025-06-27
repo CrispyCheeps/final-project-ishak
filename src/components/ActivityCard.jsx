@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 const ActivityCard = ({ id, title, description, imageUrl }) => {
   const navigate = useNavigate();
-  console.log("ActivityCard key:", id);
 
   return (
     <Card className="w-sm max-w-md mx-auto overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-200 transform hover:-translate-y-2 hover:scale-105 group cursor-pointer">

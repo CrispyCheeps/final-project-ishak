@@ -8,11 +8,9 @@ export const getPromo = () => {
       },
     })
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
-      console.error(err);
       throw err; // Re-throw the error to be handled by the caller
     });
 };

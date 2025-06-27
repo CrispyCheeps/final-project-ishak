@@ -59,21 +59,13 @@ export const {
 export default authSlice.reducer;
 
 export const loginUser = (email, password) => async (dispatch) => {
-    console.log('loginUser called with:', email, password);
-
-
     if (!email || !password) {
         dispatch(setError('Email dan password harus diisi'));
         return;
     }
     dispatch(setLoading(true));
     try {
-        console.log('Attempting to login with:', email, password);
         const data = await login(email, password);
-        console.log(data);
-        // if(data.code == 200) {
-        //     navigate("")
-        // }
         dispatch(setToken(data.token));
         dispatch(setIsLoggedIn(true));
         dispatch(setProfilePictureUrl(data.profilePictureUrl || ''));

@@ -74,11 +74,9 @@ const ActivityTable = () => {
         },
       })
       .then((res) => {
-        console.log("Data Activities:", res.data.data);
         setDataBanner(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -90,11 +88,9 @@ const ActivityTable = () => {
         },
       })
       .then((res) => {
-        console.log("Data categories:", res.data.data);
         setCategories(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -133,7 +129,6 @@ const ActivityTable = () => {
   };
 
   const handleOpenEditModal = (activity) => {
-    console.log("Opening edit modal for activity:", activity);
     setSelectedActivity(activity);
     setEditFormData({
       categoryId: activity.categoryId || "",
@@ -1561,7 +1556,6 @@ const ActivityTable = () => {
                   </div>
 
                   {/* Location Map */}
-                  {console.log(selectedActivity.location_maps)}
                   <div>
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
                       Lokasi

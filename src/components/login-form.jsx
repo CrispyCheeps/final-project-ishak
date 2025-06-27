@@ -23,15 +23,8 @@ export function LoginForm({ className, ...props }) {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    console.log("handleSubmit called");
     e.preventDefault();
     try {
-      console.log(
-        "Submitting login with email:",
-        email,
-        "and password:",
-        password
-      );
       const result = await dispatch(loginUser(email, password));
       if (result?.code == 200 && result?.data.role === "user") {
         localStorage.setItem("token", result.token);

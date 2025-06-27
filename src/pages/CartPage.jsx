@@ -207,12 +207,10 @@ const CartPage = () => {
       }
 
       const cartIds = cartItems.map((item) => item.id);
-      console.log("Cart IDs:", cartIds);
       const requestBody = {
         cartIds: cartIds,
         paymentMethodId: selectedPaymentMethod.id,
       };
-      console.log("Request Body:", requestBody);
 
       const res = await axiosInstance.post(
         "/api/v1/create-transaction",
@@ -227,9 +225,7 @@ const CartPage = () => {
       
 
       if (res.data.code === "200") {
-        // Redirect atau handle success
-        console.log("Transaction created successfully:", res.data);
-        // navigate("/transaction-success") atau sesuai kebutuhan
+        navigate("/purchased");
       } else {
         throw new Error(res.data.message || "Failed to create transaction");
       }

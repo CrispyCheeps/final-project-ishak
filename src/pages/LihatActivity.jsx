@@ -96,8 +96,6 @@ export default function LihatActivity() {
           },
         }
       );
-
-      console.log("Item added to cart:", response.data);
       alert("Item successfully added to your cart!");
     } catch (error) {
       console.error("Error adding item to cart:", error);

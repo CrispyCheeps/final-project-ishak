@@ -43,11 +43,9 @@ const BannerTable = () => {
         },
       })
       .then((res) => {
-        console.log("Data Banners:", res.data.data);
         setDataBanner(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -138,7 +136,6 @@ const BannerTable = () => {
     setIsLoading(true);
 
     try {
-      console.log("Data yang akan disimpan:", formData);
       const res = await axiosInstance.post(
         "/api/v1/banners",
         {
@@ -153,10 +150,8 @@ const BannerTable = () => {
         }
       );
 
-      console.log("Banner created:", res.data);
       alert("Banner berhasil ditambahkan!");
       handleCloseModal();
-      console.log("Response dari server:", res.data);
     } catch (error) {
       console.error("Error creating banner:", err);
       alert("Gagal menambahkan banner. Silakan coba lagi.");
@@ -176,7 +171,6 @@ const BannerTable = () => {
     setIsLoading(true);
 
     try {
-      console.log("Data yang akan diupdate:", editFormData);
 
       const res = await axiosInstance.post(
         `/api/v1/update-banner/${editFormData.id}`, // Ganti sesuai dengan field ID-nya
@@ -192,7 +186,6 @@ const BannerTable = () => {
         }
       );
 
-      console.log("Banner updated:", res.data);
       alert("Banner berhasil diperbarui!");
       handleCloseEditModal();
       fetchDataBanners(); // Refresh data after update

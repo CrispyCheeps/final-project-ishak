@@ -183,7 +183,6 @@ const PromoTable = () => {
           apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
         },
       });
-      console.log("Fetched promos:", res.data.data);
       setDataPromo(res.data.data);
     } catch (error) {
       console.error("Error fetching promos:", error);

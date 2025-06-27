@@ -31,8 +31,6 @@ export function NavUser({ user }) {
   const [userLoggedIn, setUserLoggedIn] = useState({});
   const navigate = useNavigate();
 
-  console.log(userLoggedIn);
-
   const handleLogout = () => {
     axios
       .get("/api/v1/logout", {
@@ -43,15 +41,14 @@ export function NavUser({ user }) {
       })
       .then((res) => {
         if (res.data.code === "200") {
-          console.log("Logout successful:", res.data);
           alert("Logout berhasil");
           setUserLoggedIn(null);
           localStorage.removeItem("token");
-          navigate("/");
+          navigate("/beranda");
+          window.location.reload();
         }
       })
       .catch((error) => {
-        console.error("Error during logout:", error);
         alert("Logout gagal, silakan coba lagi");
       });
   };
@@ -110,11 +107,15 @@ export function NavUser({ user }) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={userLoggedIn.profilePictureUrl}
-                    alt={userLoggedIn.name}
-                  />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  {userLoggedIn.profilePictureUrl ? (
+                    <AvatarImage
+                      src={userLoggedIn.profilePictureUrl}
+                      alt={userLoggedIn.name}
+                    />
+                  ) : null}
+                  <AvatarFallback className="rounded-lg">
+                    {userLoggedIn.name?.charAt(0).toUpperCase() || "?"}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">
@@ -126,6 +127,7 @@ export function NavUser({ user }) {
                 </div>
               </div>
             </DropdownMenuLabel>
+
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />

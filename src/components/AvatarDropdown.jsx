@@ -26,7 +26,6 @@ const AvatarDropdown = () => {
         },
       })
       .then((response) => {
-        console.log("User data fetched successfully:", response.data);
         setUserData(response.data.data);
       })
       .catch((error) => {
@@ -60,11 +59,11 @@ const AvatarDropdown = () => {
       })
       .then((res) => {
         if (res.data.code === "200") {
-          console.log("Logout successful:", res.data);
           alert("Logout berhasil");
           setUserData(null);
           localStorage.removeItem("token");
           navigate("/beranda");
+          window.location.reload(); 
         }
       })
       .catch((error) => {

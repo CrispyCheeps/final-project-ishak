@@ -45,7 +45,6 @@ export default function SignupForm() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("handleSubmit called");
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -56,19 +55,6 @@ export default function SignupForm() {
         setError("Passwords do not match");
         return;
       }
-
-      console.log(
-        "Submitting signup with email:",
-        email,
-        "password:",
-        password,
-        "name:",
-        name,
-        "phone:",
-        phoneNumber,
-        "profilePictureUrl:",
-        profilePictureUrl
-      );
       
       const result = await signupUser({ 
         email, 

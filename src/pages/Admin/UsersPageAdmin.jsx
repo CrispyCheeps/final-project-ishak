@@ -57,8 +57,6 @@ export default function UsersPageAdmin() {
         console.error("Error updating role:", err);
         alert("Failed to update user role. Please try again.");
       });
-
-    console.log(`Updated user ${userId} role to ${newRole}`);
   };
 
   const fetchUserData = () => {
