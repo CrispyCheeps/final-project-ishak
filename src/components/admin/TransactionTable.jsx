@@ -301,7 +301,7 @@ const TransactionTable = () => {
             <div className="flex items-center justify-between pt-4">
               <div className="text-sm text-muted-foreground">
                 Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of{" "}
-                {totalItems} Activities
+                {totalItems} Transactions
               </div>
               <div className="flex items-center gap-4">
                 {/* Pagination Controls */}

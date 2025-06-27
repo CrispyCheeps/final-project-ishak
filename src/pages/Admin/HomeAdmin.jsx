@@ -20,7 +20,11 @@ export default function HomeAdmin() {
         {/* Content Below */}
         <div className="flex items-center justify-center min-h-screen bg-gray-50">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800 p-6">
-            Welcome back, <span className="text-blue-600">Admin</span>!
+            Welcome back,{" "}
+            <span className="bg-gradient-to-r from-[#2BAE91] to-[#329AC0] bg-clip-text text-transparent font-semibold">
+              Admin
+            </span>
+            !
           </h1>
         </div>
       </SidebarInset>

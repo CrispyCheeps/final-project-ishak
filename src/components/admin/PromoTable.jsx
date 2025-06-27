@@ -63,9 +63,15 @@ const PromoTable = () => {
       minimumFractionDigits: 0,
     }).format(amount);
   };
+  console.log(isModalOpen);
+  console.log(isEditModalOpen);
+  console.log(formData);
 
   // Modal handlers
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenModal = () => {
+    console.log("masuk");
+    setIsModalOpen(true);
+  };
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setFormData({
@@ -81,7 +87,7 @@ const PromoTable = () => {
 
   const handleOpenEditModal = (promo) => {
     setSelectedPromo(promo);
-    setEditFormData({
+    setFormData({
       title: promo.title,
       description: promo.description,
       imageUrl: promo.imageUrl,
@@ -123,45 +129,69 @@ const PromoTable = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const newpromo = {
-        id: Date.now().toString(),
-        ...formData,
-        promo_discount_price: Number(formData.promo_discount_price),
-        minimum_claim_price: Number(formData.minimum_claim_price),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      setDataPromo([newpromo, ...dataPromo]);
+
+    try {
+      const response = await axiosInstance.post(
+        "/api/v1/create-promo",
+        {
+          ...formData,
+          promo_discount_price: Number(formData.promo_discount_price),
+          minimum_claim_price: Number(formData.minimum_claim_price),
+        },
+        {
+          headers: {
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.status !== 200) {
+        throw new Error("Failed to create promo");
+      }
+      console.log("Promo created successfully:", response.data);
+      window.location.reload();
+    } catch (error) {
+      console.error("Create promo error:", error.message);
+      alert("Gagal membuat promo.");
+    } finally {
       setIsLoading(false);
-      handleCloseModal();
-    }, 1000);
+    }
   };
 
-  const handleEditSubmit = (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const updatedpromos = dataPromo.map((promo) =>
-        promo.id === selectedPromo.id
-          ? {
-              ...promo,
-              ...editFormData,
-              promo_discount_price: Number(editFormData.promo_discount_price),
-              minimum_claim_price: Number(editFormData.minimum_claim_price),
-              updatedAt: new Date().toISOString(),
-            }
-          : promo
+
+    try {
+      const response = await axiosInstance.put(
+        `/api/v1/update-promo/${selectedPromo.id}`,
+        {
+          ...editFormData,
+          promo_discount_price: Number(editFormData.promo_discount_price),
+          minimum_claim_price: Number(editFormData.minimum_claim_price),
+        },
+        {
+          headers: {
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
-      setDataPromo(updatedpromos);
+
+      if (response.status !== 200) {
+        throw new Error("Failed to update promo");
+      }
+
+      window.location.reload();
+    } catch (error) {
+      console.error("Update promo error:", error.message);
+      alert("Gagal mengedit promo.");
+    } finally {
       setIsLoading(false);
-      handleCloseEditModal();
-    }, 1000);
+    }
   };
 
   const handleDelete = (id) => {
@@ -200,14 +230,14 @@ const PromoTable = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Promo Management</h1>
           <p className="text-gray-600 mt-1">
-            Kelola promo promo yang ditampilkan di aplikasi
+            Kelola promo-promo yang ditampilkan di aplikasi
           </p>
         </div>
         <button
           onClick={handleOpenModal}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
         >
-          + Tambah Promo promo
+          + Tambah Promo
         </button>
       </div>
 
@@ -333,7 +363,7 @@ const PromoTable = () => {
           <div className="flex items-center justify-between pt-4">
             <div className="text-sm text-muted-foreground">
               Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of{" "}
-              {totalItems} banners
+              {totalItems} Promos
             </div>
             <div className="flex items-center gap-4">
               {/* Pagination Controls */}
@@ -403,15 +433,17 @@ const PromoTable = () => {
       </div>
 
       {/* Add Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      {(isModalOpen || isEditModalOpen) && (
+        <div className="fixed inset-0 bg-opacity-20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
                 Tambah Promo Baru
               </h2>
               <button
-                onClick={handleCloseModal}
+                onClick={
+                  isEditModalOpen ? handleCloseEditModal : handleCloseModal
+                }
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <X size={24} />
@@ -572,7 +604,7 @@ const PromoTable = () => {
                   disabled={isLoading}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {isLoading ? "Menyimpan..." : "Simpan Promo promo"}
+                  {isLoading ? "Menyimpan..." : "Simpan Promo"}
                 </button>
               </div>
             </form>
