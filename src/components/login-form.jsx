@@ -92,9 +92,9 @@ export function LoginForm({ className, ...props }) {
         >
           {loading ? "Logging in..." : "Login"}
         </Button>
-        <div onClick={() => navigate("/signup")} className="text-center text-sm text-[#939393]">
+        <div onClick={() => navigate("/signup")} className="text-center text-sm text-[#939393] cursor-pointer">
           Don&apos;t have an account?{" "}
-          <a href="#" className="underline underline-offset-4">
+          <a className="underline underline-offset-4">
             Sign up
           </a>
         </div>

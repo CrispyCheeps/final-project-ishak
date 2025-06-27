@@ -30,7 +30,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Activity, Folder, Home, Image, Percent, Users } from "lucide-react"
+import { Activity, Folder, Home, Image, Percent, ShoppingCart, Users } from "lucide-react"
 
 const data = {
   navMain: [
@@ -64,6 +64,11 @@ const data = {
       url: "/admin/activity",
       icon: Activity,
     },
+    {
+      title: "Purchase",
+      url: "/admin/purchase",
+      icon: ShoppingCart,
+    }
   ],
 }
 

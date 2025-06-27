@@ -1,6 +1,6 @@
 import { GalleryVerticalEnd } from "lucide-react";
 import { LoginForm } from "@/components/login-form";
-import { SignupForm } from "@/components/SignUpForm";
+import SignupForm from "@/components/SignupForm";
 export default function SignupPage() {
   return (
     <div className="grid min-h-svh w-screen lg:grid-cols-2">

@@ -17,8 +17,8 @@ import PromoPageAdmin from "./pages/Admin/PromoPageAdmin";
 import CategoryPageAdmin from "./pages/Admin/CategoryPageAdmin";
 import ActivityiPageAdmin from "./pages/Admin/ActivityPageAdmin";
 import MyPurchase from "./pages/MyPurchase";
-import { SignupForm } from "./components/SignUpForm";
 import SignupPage from "./pages/SignupPage";
+import PurchasePageAdmin from "./pages/Admin/PurchasePageAdmin";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -88,6 +88,14 @@ function App() {
             element={
               <PrivateRoute>
                 <ActivityiPageAdmin />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/purchase"
+            element={
+              <PrivateRoute>
+                <PurchasePageAdmin />
               </PrivateRoute>
             }
           />
