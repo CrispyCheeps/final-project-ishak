@@ -66,7 +66,7 @@ const Navbar = () => {
 
       {/* Nav Items */}
       <ul
-        className={`absolute gap-8 md:static top-16 md:top-auto left-0 md:left-auto w-full md:w-auto bg-black md:bg-transparent shadow-lg flex-col md:flex-row items-center md:flex gap-6 text-ul transition-all duration-300 ease-in-out md:gap-8 ${
+        className={`absolute gap-8 md:static top-16 md:top-auto left-0 md:left-auto w-full md:w-auto bg-black md:bg-transparent flex-col md:flex-row items-center md:flex gap-6 text-ul transition-all duration-300 ease-in-out md:gap-8 ${
           isMobileMenuOpen ? "flex" : "hidden"
         } md:flex py-4 md:py-0 px-6 md:px-0 rounded-xl md:rounded-none`}
       >
